@@ -7,6 +7,7 @@ import AnimationWrapper from "../common/page-animation";
 import NoDataMessage from "../components/nodata.component";
 import NotificationCard from "../components/notification-card.component";
 import LoadMoreDataBtn from "../components/load-more.component";
+import { credentialHeaders } from '~/services/credentials'
 
 const NotificationsPage = () => {
 
@@ -24,9 +25,10 @@ const NotificationsPage = () => {
 
 
   const fetchNotifications = ({ page, deletedDocCount = 0 }) => {
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/notifications", { page, filter, deletedDocCount }, {
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/notifications`, { page, filter, deletedDocCount }, {
       headers: {
-        'Authorization': `Bearer ${access_token}`
+        'X-Authorization': `Bearer ${access_token}`,
+        ...credentialHeaders
       }
     })
       .then(async ({ data: { notifications: data } }) => {

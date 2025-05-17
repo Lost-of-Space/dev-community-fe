@@ -9,6 +9,7 @@ import { activeTabRef } from "../components/inpage-navigation.component";
 import NoDataMessage from "../components/nodata.component";
 import { filterPaginationData } from "../common/filter-pagination-data";
 import LoadMoreDataBtn from "../components/load-more.component";
+import { credentialHeaders } from '~/services/credentials'
 
 const HomePage = () => {
 
@@ -20,7 +21,9 @@ const HomePage = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    axios.get(import.meta.env.VITE_SERVER_DOMAIN + "/top-tags")
+    axios.get(`${import.meta.env.VITE_SERVER_DOMAIN}/top-tags`, {
+      headers: { ...credentialHeaders }
+    })
       .then(({ data }) => setCategories(data.tags))
       .catch(err => console.log("Failed to load tags:", err));
   }, []);
@@ -41,7 +44,9 @@ const HomePage = () => {
   };
 
   const fetchLatestPosts = ({ page = 1 }) => {
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/latest-posts", { page })
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/latest-posts`, { page }, {
+      headers: { ...credentialHeaders }
+    })
       .then(async ({ data }) => {
 
         let formatedData = await filterPaginationData({
@@ -59,7 +64,9 @@ const HomePage = () => {
   }
 
   const fetchPopularPosts = () => {
-    axios.get(import.meta.env.VITE_SERVER_DOMAIN + "/popular-posts")
+    axios.get(`${import.meta.env.VITE_SERVER_DOMAIN}/popular-posts`, {
+      headers: { ...credentialHeaders }
+    })
       .then(({ data }) => {
         setPopularPosts(data.posts)
       })
@@ -69,7 +76,9 @@ const HomePage = () => {
   }
 
   const fetchPostsByCategory = ({ page = 1 }) => {
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/search-posts", { tag: pageState, page })
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/search-posts`, { tag: pageState, page }, {
+      headers: { ...credentialHeaders }
+    })
       .then(async ({ data }) => {
         let formatedData = await filterPaginationData({
           state: latestPosts,

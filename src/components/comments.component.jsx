@@ -5,11 +5,17 @@ import axios from "axios";
 import NoDataMessage from "./nodata.component";
 import AnimationWrapper from "../common/page-animation";
 import CommentCard from "./comment-card.component";
+import { credentialHeaders } from '~/services/credentials'
+
 
 export const fetchComments = async ({ skip = 0, post_id, setParentCommentCountFunc, comment_array = null }) => {
   let res;
 
-  await axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/get-post-comments", { post_id, skip })
+  await axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-post-comments`, { post_id, skip }, {
+    headers: {
+      ...credentialHeaders
+    }
+  })
     .then(({ data }) => {
       data.map(comment => {
         comment.childrenLevel = 0;

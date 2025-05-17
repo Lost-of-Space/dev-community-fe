@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import DialogWrapper from "../../components/dialog-window.component";
+import { credentialHeaders } from '~/services/credentials'
 
 const ManagePostCard = ({ post, setPosts }) => {
   const { userAuth: { access_token, isAdmin } } = useContext(UserContext);
@@ -20,11 +21,12 @@ const ManagePostCard = ({ post, setPosts }) => {
   const deletePost = async (postId) => {
     try {
       const response = await axios.post(
-        import.meta.env.VITE_SERVER_DOMAIN + "/delete-post",
+        `${import.meta.env.VITE_SERVER_DOMAIN}/delete-post`,
         { post_id: postId, isAdmin },
         {
           headers: {
-            'Authorization': `Bearer ${access_token}`
+            'X-Authorization': `Bearer ${access_token}`,
+            ...credentialHeaders
           }
         }
       );

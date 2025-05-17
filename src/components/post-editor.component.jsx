@@ -12,6 +12,7 @@ import axios from "axios";
 import { ThemeContext, UserContext } from "../App";
 import useCloudinaryUpload from "../common/cloudinary";
 import Loader from "./loader.component";
+import { credentialHeaders } from '~/services/credentials'
 
 const PostEditor = () => {
 
@@ -139,9 +140,10 @@ const PostEditor = () => {
           title, banner, des, content, tags, draft: true
         }
         //sends access token to confirm authorization
-        axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/create-post", { ...postObj, id: post_id }, {
+        axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/create-post`, { ...postObj, id: post_id }, {
           headers: {
-            'Authorization': `Bearer ${access_token}`
+            'X-Authorization': `Bearer ${access_token}`,
+            ...credentialHeaders
           }
         })
           .then(() => {

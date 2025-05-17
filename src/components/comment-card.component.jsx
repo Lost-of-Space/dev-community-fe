@@ -6,6 +6,8 @@ import CommentField from "./comment-field.component";
 import { PostContext } from "../pages/post.page";
 import axios from "axios";
 
+import { credentialHeaders } from '~/services/credentials'
+
 const CommentCard = ({ index, leftVal, commentData }) => {
 
   let { commented_by: { personal_info: { profile_img, fullname, username: commented_by_username } }, commentedAt, comment, _id, children } = commentData;
@@ -64,9 +66,10 @@ const CommentCard = ({ index, leftVal, commentData }) => {
   const deleteComment = (e) => {
     e.target.setAttribute("disabled", true)
 
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/delete-comment", { _id }, {
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/delete-comment`, { _id }, {
       headers: {
-        'Authorization': `Bearer ${access_token}`
+        'X-Authorization': `Bearer ${access_token}`,
+        ...credentialHeaders
       }
     })
       .then(() => {
@@ -88,7 +91,11 @@ const CommentCard = ({ index, leftVal, commentData }) => {
     if (commentsArr[currentIndex].children.length) {
       hideReplies();
 
-      axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/get-replies", { _id: commentsArr[currentIndex]._id, skip })
+      axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-replies`, { _id: commentsArr[currentIndex]._id, skip }, {
+        headers: {
+          ...credentialHeaders
+        }
+      })
         .then(({ data: { replies } }) => {
 
           commentsArr[currentIndex].isReplyLoaded = true;

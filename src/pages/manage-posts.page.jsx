@@ -10,6 +10,7 @@ import AnimationWrapper from "../common/page-animation";
 import { ManageDraftPostCard, ManagePublishedPostCard } from "../components/manage-post-card.component";
 import LoadMoreDataBtn from "../components/load-more.component";
 import { useSearchParams } from "react-router-dom";
+import { credentialHeaders } from '~/services/credentials'
 
 const ManagePostsPage = () => {
 
@@ -22,9 +23,10 @@ const ManagePostsPage = () => {
   let activeTab = useSearchParams()[0].get("tab");
 
   const getPosts = ({ page, draft, deletedDocCount = 0 }) => {
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/user-written-posts", { page, draft, query, deletedDocCount }, {
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/user-written-posts`, { page, draft, query, deletedDocCount }, {
       headers: {
-        'Authorization': `Bearer ${access_token}`
+        'X-Authorization': `Bearer ${access_token}`,
+        ...credentialHeaders
       }
     })
       .then(async ({ data }) => {

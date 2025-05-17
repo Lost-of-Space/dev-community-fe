@@ -3,6 +3,7 @@ import axios from "axios";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { UserContext } from "../App";
 import Loader from "../components/loader.component";
+import { credentialHeaders } from '~/services/credentials'
 
 const UserStatisticsPage = () => {
   const [days, setDays] = useState(7);
@@ -43,11 +44,12 @@ const UserStatisticsPage = () => {
   const fetchData = () => {
     setLoading(true);
     axios.post(
-      import.meta.env.VITE_SERVER_DOMAIN + "/get-user-statistics",
+      `${import.meta.env.VITE_SERVER_DOMAIN}/get-user-statistics`,
       { days },
       {
         headers: {
-          'Authorization': `Bearer ${access_token}`
+          'X-Authorization': `Bearer ${access_token}`,
+          ...credentialHeaders
         }
       }
     )

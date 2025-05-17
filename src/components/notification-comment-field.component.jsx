@@ -3,6 +3,8 @@ import toast, { Toaster } from "react-hot-toast"
 import { UserContext } from "../App";
 import axios from "axios";
 
+import { credentialHeaders } from '~/services/credentials'
+
 const NotificationCommentField = ({ _id, post_author, index = undefined, replyingTo = undefined, setReplying, notification_id, notificationData }) => {
 
   let { _id: user_id } = post_author;
@@ -17,10 +19,11 @@ const NotificationCommentField = ({ _id, post_author, index = undefined, replyin
       return toast.error("Comment cannot be empty");
     }
 
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/add-comment", { _id, post_author: user_id, comment, replying_to: replyingTo, notification_id },
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/add-comment`, { _id, post_author: user_id, comment, replying_to: replyingTo, notification_id },
       {
         headers: {
-          'Authorization': `Bearer ${access_token}`
+          'X-Authorization': `Bearer ${access_token}`,
+          ...credentialHeaders
         }
       })
       .then(({ data }) => {

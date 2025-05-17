@@ -8,6 +8,7 @@ import LoadMoreDataBtn from "../../components/load-more.component";
 import { filterPaginationData } from "../../common/filter-pagination-data";
 import SortButton from "../components/sort-button.component";
 import ManagePostsCard from "../components/manage-posts-card.component";
+import {credentialHeaders } from '~/services/credentials'
 
 const PostsManagementPage = () => {
   let { userAuth: { access_token, isAdmin } } = useContext(UserContext);
@@ -25,7 +26,7 @@ const PostsManagementPage = () => {
   const [sortOrder, setSortOrder] = useState("desc");
 
   const getPosts = ({ page, deletedDocCount = 0 }) => {
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/get-posts-adm", {
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-posts-adm`, {
       page,
       filter: query.search ? "search" : "all",
       query: query.search,
@@ -36,7 +37,8 @@ const PostsManagementPage = () => {
       sortOrder
     }, {
       headers: {
-        'Authorization': `Bearer ${access_token}`
+        'X-Authorization': `Bearer ${access_token}`,
+        ...credentialHeaders
       }
     })
       .then(async ({ data }) => {

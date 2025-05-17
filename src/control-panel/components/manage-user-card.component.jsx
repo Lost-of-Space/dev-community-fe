@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import DialogWrapper from "../../components/dialog-window.component";
+import { credentialHeaders } from '~/services/credentials'
 
 const ManageUserCard = ({ user, setUsers }) => {
   const { userAuth, userAuth: { access_token, isAdmin } } = useContext(UserContext);
@@ -22,7 +23,7 @@ const ManageUserCard = ({ user, setUsers }) => {
 
     try {
       const response = await axios.patch(
-        import.meta.env.VITE_SERVER_DOMAIN + "/toggle-user-flag",
+        `${import.meta.env.VITE_SERVER_DOMAIN}/toggle-user-flag`,
         {
           targetUserId,
           isAdmin,
@@ -31,6 +32,7 @@ const ManageUserCard = ({ user, setUsers }) => {
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
+            ...credentialHeaders
           }
         }
       );

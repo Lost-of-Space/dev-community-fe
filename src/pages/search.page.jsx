@@ -9,6 +9,7 @@ import NoDataMessage from "../components/nodata.component";
 import { filterPaginationData } from "../common/filter-pagination-data";
 import LoadMoreDataBtn from "../components/load-more.component";
 import UserCard from "../components/usercard.component";
+import { credentialHeaders } from '~/services/credentials'
 
 const SearchPage = () => {
 
@@ -42,11 +43,11 @@ const SearchPage = () => {
         }
 
         axios
-            .post(import.meta.env.VITE_SERVER_DOMAIN + "/search-posts", {
+            .post(`${import.meta.env.VITE_SERVER_DOMAIN}/search-posts`, {
                 query: searchQuery,
                 tag: searchTags,
                 page,
-            })
+            }, { headers: { ...credentialHeaders } })
             .then(async ({ data }) => {
                 let formatedData = await filterPaginationData({
                     state: latestPosts,
@@ -66,7 +67,7 @@ const SearchPage = () => {
         const isExact = query.startsWith('@');
         const searchQuery = isExact ? query.slice(1) : query;
 
-        axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/search-users", { query: searchQuery, isExact })
+        axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/search-users`, { query: searchQuery, isExact }, { headers: { ...credentialHeaders } })
             .then(({ data: { users } }) => {
                 setUsers(users);
             })

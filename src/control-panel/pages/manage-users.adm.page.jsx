@@ -8,6 +8,7 @@ import LoadMoreDataBtn from "../../components/load-more.component";
 import { filterPaginationData } from "../../common/filter-pagination-data";
 import ManageUserCard from "../components/manage-user-card.component";
 import SortButton from "../components/sort-button.component";
+import { credentialHeaders } from '~/services/credentials'
 
 const ManageUsersPage = () => {
 
@@ -27,7 +28,7 @@ const ManageUsersPage = () => {
   const [sortOrder, setSortOrder] = useState("desc");
 
   const getUsers = ({ page, deletedDocCount = 0 }) => {
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/get-users", {
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-users`, {
       page,
       filter: query.search ? "search" : "all",
       query: query.search,
@@ -38,7 +39,8 @@ const ManageUsersPage = () => {
       sortOrder
     }, {
       headers: {
-        'Authorization': `Bearer ${access_token}`
+        'X-Authorization': `Bearer ${access_token}`,
+        ...credentialHeaders
       }
     })
       .then(async ({ data }) => {

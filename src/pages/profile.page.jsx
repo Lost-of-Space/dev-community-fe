@@ -12,6 +12,7 @@ import PostCard from "../components/post-card.component";
 import NoDataMessage from "../components/nodata.component";
 import LoadMoreDataBtn from "../components/load-more.component";
 import PageNotFound from "./404.page";
+import { credentialHeaders } from '~/services/credentials'
 
 export const profileDataStructure = {
   personal_info: {
@@ -53,7 +54,11 @@ const ProfilePage = () => {
   let { userAuth: { username, isBlocked } } = useContext(UserContext)
 
   const fetchUserProfile = async () => {
-    await axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/get-profile", { username: profileId })
+    await axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-profile`, { username: profileId }, {
+      headers: {
+        ...credentialHeaders
+      }
+    })
       .then(({ data: user }) => {
         if (user != null) {
           setProfile(user);
@@ -72,7 +77,7 @@ const ProfilePage = () => {
 
     user_id = user_id == undefined ? posts.user_id : user_id;
 
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/search-posts", { author: user_id, page })
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/search-posts`, { author: user_id, page })
       .then(async ({ data }) => {
 
         let formatedData = await filterPaginationData({

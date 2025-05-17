@@ -5,6 +5,7 @@ import PostEditor from "../components/post-editor.component";
 import PublishForm from "../components/publish-form.component";
 import Loader from "../components/loader.component";
 import axios from "axios";
+import { credentialHeaders } from '~/services/credentials'
 
 const postStructure = {
   title: '',
@@ -33,7 +34,11 @@ const Editor = () => {
       return setLoading(false);
     }
 
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/get-post", { post_id, draft: true, mode: 'edit' })
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-post`, { post_id, draft: true, mode: 'edit' }, {
+      headers: {
+        ...credentialHeaders
+      }
+    })
       .then(({ data: { post } }) => {
         setPost(post);
         setLoading(false);
