@@ -8,6 +8,7 @@ import axios from "axios";
 import useCloudinaryUpload from "../common/cloudinary";
 import InputBox from "../components/input.component";
 import { storeInSession } from "../common/session";
+import { credentialHeaders } from '~/services/credentials'
 
 const EditProfilePage = () => {
 
@@ -51,9 +52,10 @@ const EditProfilePage = () => {
         const url = await uploadToCloudinary(updatedProfileImg);
         if (url) {
           console.log("Uploaded image URL:", url);
-          axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/update-profile-img", { url }, {
+          axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/update-profile-img`, { url }, {
             headers: {
-              'Authorization': `Bearer ${access_token}`
+              'X-Authorization': `Bearer ${access_token}`,
+              ...credentialHeaders
             }
           })
             .then(({ data }) => {
@@ -104,13 +106,13 @@ const EditProfilePage = () => {
     let loadingToast = toast.loading("Updating...");
     e.target.setAttribute("disabled", true);
 
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/update-profile", {
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/update-profile`, {
       username, bio, social_links: {
         youtube, facebook, twitter, github, instagram, website
       }
     }, {
       headers: {
-        'Authorization': `Bearer ${access_token}`
+        'X-Authorization': `Bearer ${access_token}`
       }
     })
       .then(({ data }) => {
@@ -134,7 +136,7 @@ const EditProfilePage = () => {
 
   useEffect(() => {
     if (access_token) {
-      axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/get-profile", { username: userAuth.username })
+      axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-profile`, { username: userAuth.username })
         .then(({ data }) => {
           setProfile(data);
           setLoading(false);

@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import DialogWrapper from "../../components/dialog-window.component";
+import { credentialHeaders } from '~/services/credentials'
 
 const ManagePostCard = ({ post, setPosts }) => {
   const { userAuth: { access_token, isAdmin } } = useContext(UserContext);
@@ -20,11 +21,12 @@ const ManagePostCard = ({ post, setPosts }) => {
   const deletePost = async (postId) => {
     try {
       const response = await axios.post(
-        import.meta.env.VITE_SERVER_DOMAIN + "/delete-post",
+        `${import.meta.env.VITE_SERVER_DOMAIN}/delete-post`,
         { post_id: postId, isAdmin },
         {
           headers: {
-            'Authorization': `Bearer ${access_token}`
+            'X-Authorization': `Bearer ${access_token}`,
+            ...credentialHeaders
           }
         }
       );
@@ -44,28 +46,29 @@ const ManagePostCard = ({ post, setPosts }) => {
   };
 
   return (
-    <tr className="border-b border-grey hover:bg-grey/20">
-      <td className="p-4 max-w-[15rem]">
-        <NavLink to={`/post/${post_id}`} className="line-clamp-1 text-dark-grey hover:underline active:underline">
+    <tr className="border-b border-grey hover:bg-grey/20 max-sm:flex flex-col max-sm:mb-4">
+      <td className="p-4 max-sm:py-2 max-sm:pt-3 max-w-[15rem]">
+        <NavLink to={`/post/${post_id}`} className="line-clamp-1 text-dark-grey max-sm:text-xl max-sm:text-black hover:underline active:underline">
           {title}
         </NavLink>
       </td>
+      <hr className="hidden max-sm:block text-grey my-1" />
 
-      <td className="p-4">
+      <td className="p-4 max-sm:py-1">
         <NavLink to={`/user/${username}`} className="text-dark-grey hover:underline active:underline">
-          @{username}
+          <span className="hidden max-sm:inline-block text-black">By</span> @{username}
         </NavLink>
       </td>
 
-      <td className="p-4">
+      <td className="p-4 max-sm:py-1">
         <p>{publishedAt ? new Date(publishedAt).toLocaleDateString() : "Not published"}</p>
       </td>
 
-      <td className="p-4">
+      <td className="p-4 max-sm:hidden">
         <p>{total_likes}</p>
       </td>
 
-      <td className="p-4">
+      <td className="p-4 max-sm:py-1 max-sm:flex gap-2">
         {
           draft ?
             <span className="bg-yellow/30 text-yellow py-1 px-3 rounded text-xs">Draft</span>
@@ -75,6 +78,7 @@ const ManagePostCard = ({ post, setPosts }) => {
       </td>
 
       <td className="p-4">
+        <hr className="hidden max-sm:block text-grey pb-3" />
         <DialogWrapper
           onConfirm={() => deletePost(post_id)}
           message={<p>Are you sure you want to delete post <span className="text-royalblue">"{title}"</span>?</p>}

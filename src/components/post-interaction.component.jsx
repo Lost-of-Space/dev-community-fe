@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../App";
 import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
+import { credentialHeaders } from '~/services/credentials'
 
 const PostInteraction = () => {
 
@@ -13,9 +14,10 @@ const PostInteraction = () => {
 
   useEffect(() => {
     if (access_token) {
-      axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/isliked-by-user", { _id }, {
+      axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/isliked-by-user`, { _id }, {
         headers: {
-          'Authorization': `Bearer ${access_token}`
+          'X-Authorization': `Bearer ${access_token}`,
+          ...credentialHeaders
         }
       })
         .then(({ data: { result } }) => {
@@ -35,9 +37,10 @@ const PostInteraction = () => {
 
       setPost({ ...post, activity: { ...activity, total_likes } })
 
-      axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/like-post", { _id, isLikedByUser }, {
+      axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/like-post`, { _id, isLikedByUser }, {
         headers: {
-          'Authorization': `Bearer ${access_token}`
+          'X-Authorization': `Bearer ${access_token}`,
+          ...credentialHeaders
         }
       })
         .then(({ data }) => {

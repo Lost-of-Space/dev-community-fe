@@ -8,6 +8,7 @@ import LoadMoreDataBtn from "../../components/load-more.component";
 import { filterPaginationData } from "../../common/filter-pagination-data";
 import ManageUserCard from "../components/manage-user-card.component";
 import SortButton from "../components/sort-button.component";
+import { credentialHeaders } from '~/services/credentials'
 
 const ManageUsersPage = () => {
 
@@ -27,7 +28,7 @@ const ManageUsersPage = () => {
   const [sortOrder, setSortOrder] = useState("desc");
 
   const getUsers = ({ page, deletedDocCount = 0 }) => {
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/get-users", {
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-users`, {
       page,
       filter: query.search ? "search" : "all",
       query: query.search,
@@ -38,7 +39,8 @@ const ManageUsersPage = () => {
       sortOrder
     }, {
       headers: {
-        'Authorization': `Bearer ${access_token}`
+        'X-Authorization': `Bearer ${access_token}`,
+        ...credentialHeaders
       }
     })
       .then(async ({ data }) => {
@@ -136,12 +138,12 @@ const ManageUsersPage = () => {
       </div>
 
       {
-        users == null ? <Loader />
-          :
-          users.results.length ?
+        users == null ? <Loader /> :
+          users.results.length ? (
             <>
-              {
-                <table className="w-full">
+              {/* Desktop Table View */}
+              <div className="overflow-x-auto hidden sm:block">
+                <table className="w-full min-w-[700px]">
                   <thead>
                     <tr className="border-b border-grey text-left">
                       <th className="border-r border-grey">
@@ -158,19 +160,28 @@ const ManageUsersPage = () => {
                       <th className="py-3 px-4">Actions</th>
                     </tr>
                   </thead>
-
                   <tbody>
-                    {users.results.map(user => <ManageUserCard key={user._id} user={user} setUsers={setUsers} />)}
+                    {users.results.map(user => (
+                      <ManageUserCard key={user._id} user={user} setUsers={setUsers} />
+                    ))}
                   </tbody>
                 </table>
+              </div>
 
-              }
+              {/* Mobile Card View */}
+              <div className="sm:hidden">
+                {users.results.map(user => (
+                  <ManageUserCard key={user._id} user={user} setUsers={setUsers} />
+                ))}
+              </div>
 
               <LoadMoreDataBtn className="my-4" state={users} fetchDataFunc={getUsers} additionalParam={{ draft: false, deletedDocCount: users.deletedDocCount }} />
             </>
-            :
+          ) : (
             <NoDataMessage message="No users found." />
+          )
       }
+
 
     </>
   )

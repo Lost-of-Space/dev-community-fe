@@ -6,6 +6,7 @@ import Tag from "./tags.component";
 import axios from "axios";
 import { UserContext } from "../App";
 import { useNavigate, useParams } from "react-router-dom";
+import {credentialHeaders } from '~/services/credentials'
 
 const PublishForm = () => {
 
@@ -91,9 +92,10 @@ const PublishForm = () => {
     }
 
     //sends access token to confirm authorization
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/create-post", { ...postObj, id: post_id }, {
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/create-post`, { ...postObj, id: post_id }, {
       headers: {
-        'Authorization': `Bearer ${access_token}`
+        'X-Authorization': `Bearer ${access_token}`,
+        ...credentialHeaders
       }
     })
       .then(() => {

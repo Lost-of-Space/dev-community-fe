@@ -8,6 +8,7 @@ import LoadMoreDataBtn from "../../components/load-more.component";
 import { filterPaginationData } from "../../common/filter-pagination-data";
 import SortButton from "../components/sort-button.component";
 import ManagePostsCard from "../components/manage-posts-card.component";
+import { credentialHeaders } from '~/services/credentials'
 
 const PostsManagementPage = () => {
   let { userAuth: { access_token, isAdmin } } = useContext(UserContext);
@@ -25,7 +26,7 @@ const PostsManagementPage = () => {
   const [sortOrder, setSortOrder] = useState("desc");
 
   const getPosts = ({ page, deletedDocCount = 0 }) => {
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/get-posts-adm", {
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-posts-adm`, {
       page,
       filter: query.search ? "search" : "all",
       query: query.search,
@@ -36,7 +37,8 @@ const PostsManagementPage = () => {
       sortOrder
     }, {
       headers: {
-        'Authorization': `Bearer ${access_token}`
+        'X-Authorization': `Bearer ${access_token}`,
+        ...credentialHeaders
       }
     })
       .then(async ({ data }) => {
@@ -130,41 +132,72 @@ const PostsManagementPage = () => {
       </div>
 
       {
-        posts == null ? <Loader />
-          :
-          posts.results.length ?
-            <>
-              {
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-grey text-left">
-                      <th className="border-r border-grey">
-                        <SortButton sortFunc={handleSort} sortBy={"title"} fieldState={sortField} orderState={sortOrder} label="Title" />
-                      </th>
-                      <th className="py-3 px-4 border-r border-grey">Author</th>
-                      <th className="border-r border-grey">
-                        <SortButton sortFunc={handleSort} sortBy={"publishedAt"} fieldState={sortField} orderState={sortOrder} label="Published At" />
-                      </th>
-                      <th className="border-r border-grey">
-                        <SortButton sortFunc={handleSort} sortBy={"activity.total_likes"} fieldState={sortField} orderState={sortOrder} label="Likes" />
-                      </th>
-                      <th className="py-3 px-4 border-r border-grey">Status</th>
-                      <th className="py-3 px-4">Actions</th>
-                    </tr>
-                  </thead>
+        posts == null ? (
+          <Loader />
+        ) : posts.results.length ? (
+          <>
+            {/* Desktop Table View */}
+            <div className="overflow-x-auto hidden md:block">
+              <table className="w-full min-w-[700px]">
+                <thead>
+                  <tr className="border-b border-grey text-left">
+                    <th className="border-r border-grey">
+                      <SortButton
+                        sortFunc={handleSort}
+                        sortBy={"title"}
+                        fieldState={sortField}
+                        orderState={sortOrder}
+                        label="Title"
+                      />
+                    </th>
+                    <th className="py-3 px-4 border-r border-grey">Author</th>
+                    <th className="border-r border-grey">
+                      <SortButton
+                        sortFunc={handleSort}
+                        sortBy={"publishedAt"}
+                        fieldState={sortField}
+                        orderState={sortOrder}
+                        label="Published At"
+                      />
+                    </th>
+                    <th className="border-r border-grey">
+                      <SortButton
+                        sortFunc={handleSort}
+                        sortBy={"activity.total_likes"}
+                        fieldState={sortField}
+                        orderState={sortOrder}
+                        label="Likes"
+                      />
+                    </th>
+                    <th className="py-3 px-4 border-r border-grey">Status</th>
+                    <th className="py-3 px-4">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {posts.results.map(post => (
+                    <ManagePostsCard key={post.post_id} post={post} setPosts={setPosts} />
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-                  <tbody>
-                    {posts.results.map(post => (
-                      <ManagePostsCard key={post.post_id} post={post} setPosts={setPosts} />
-                    ))}
-                  </tbody>
-                </table>
-              }
+            {/* Mobile Card View */}
+            <div className="md:hidden">
+              {posts.results.map(post => (
+                <ManagePostsCard key={post.post_id} post={post} setPosts={setPosts} isMobile />
+              ))}
+            </div>
 
-              <LoadMoreDataBtn className="my-4" state={posts} fetchDataFunc={getPosts} additionalParam={{ deletedDocCount: posts.deletedDocCount }} />
-            </>
-            :
-            <NoDataMessage message="No posts found." />
+            <LoadMoreDataBtn
+              className="my-4"
+              state={posts}
+              fetchDataFunc={getPosts}
+              additionalParam={{ deletedDocCount: posts.deletedDocCount }}
+            />
+          </>
+        ) : (
+          <NoDataMessage message="No posts found." />
+        )
       }
     </>
   )

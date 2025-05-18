@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "../App";
 import axios from "axios";
 import DialogWrapper from "./dialog-window.component";
-
+import { credentialHeaders } from '~/services/credentials'
 
 const PostStats = ({ stats }) => {
   return (
@@ -110,9 +110,10 @@ const deletePost = (post, access_token) => {
 
   let { index, post_id, setStateFunc } = post;
 
-  axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/delete-post", { post_id }, {
+  axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/delete-post`, { post_id }, {
     headers: {
-      'Authorization': `Bearer ${access_token}`
+      'X-Authorization': `Bearer ${access_token}`,
+      ...credentialHeaders
     }
   })
     .then(({ data }) => {

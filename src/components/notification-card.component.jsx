@@ -4,6 +4,7 @@ import { useContext, useState } from "react";
 import NotificationCommentField from "./notification-comment-field.component";
 import { UserContext } from "../App";
 import axios from "axios";
+import {credentialHeaders } from '~/services/credentials'
 
 const NotificationCard = ({ data, index, notificationState }) => {
 
@@ -22,9 +23,10 @@ const NotificationCard = ({ data, index, notificationState }) => {
   const handleDelete = (comment_id, type, target) => {
     target.setAttribute("disabled", true);
 
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/delete-comment", { _id: comment_id }, {
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/delete-comment`, { _id: comment_id }, {
       headers: {
-        'Authorization': `Bearer ${access_token}`
+        'X-Authorization': `Bearer ${access_token}`,
+        ...credentialHeaders
       }
     })
       .then(() => {

@@ -6,6 +6,8 @@ import {
 import { UserContext } from "../../App";
 import Loader from "../../components/loader.component";
 
+import { credentialHeaders } from '~/services/credentials';
+
 const StatisticsPage = () => {
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -41,7 +43,8 @@ const StatisticsPage = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${access_token}`
+            "X-Authorization": `Bearer ${access_token}`,
+            ...credentialHeaders
           }
         }
       );

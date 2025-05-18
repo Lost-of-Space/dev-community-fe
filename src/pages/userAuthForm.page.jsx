@@ -11,6 +11,7 @@ import { UserContext } from "../App";
 import { authWithGoogle, authWithGithub } from "../common/firebase";
 import TextAnimationWrap from "../common/text-animation";
 
+import { credentialHeaders } from '~/services/credentials'
 
 const UserAuthForm = ({ type }) => {
 
@@ -18,15 +19,20 @@ const UserAuthForm = ({ type }) => {
 
   const userAuthThroughServer = (serverRoute, formData) => {
 
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + serverRoute, formData)
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}${serverRoute}`, formData, {
+      withCredentials: true,
+      headers: credentialHeaders
+    })
       .then(({ data }) => {
         storeInSession("user", JSON.stringify(data))
 
         setUserAuth(data)
       })
-      .catch(({ response }) => {
-        toast.error(response.data.error)
+      .catch((error) => {
+        const errorMsg = error?.response?.data?.error || "Something went wrong.";
+        toast.error(errorMsg);
       })
+
   }
 
   const handleSubmit = (e) => {

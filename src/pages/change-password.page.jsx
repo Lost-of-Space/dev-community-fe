@@ -4,6 +4,7 @@ import InputBox from "../components/input.component"
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { UserContext } from "../App";
+import {credentialHeaders } from '~/services/credentials'
 
 const ChangePasswordPage = () => {
 
@@ -37,9 +38,10 @@ const ChangePasswordPage = () => {
 
     let loadingToast = toast.loading("Updating...")
 
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/change-password", formData, {
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/change-password`, formData, {
       headers: {
-        'Authorization': `Bearer ${access_token}`
+        'X-Authorization': `Bearer ${access_token}`,
+        ...credentialHeaders
       }
     })
       .then(() => {

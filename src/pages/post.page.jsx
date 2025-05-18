@@ -9,6 +9,7 @@ import PostCard from "../components/post-card.component";
 import PostContent from "../components/post-content.component";
 import CommentsContainer from "../components/comments.component";
 import { fetchComments } from "../components/comments.component";
+import { credentialHeaders } from '~/services/credentials'
 
 export const postStructure = {
   title: '',
@@ -35,14 +36,22 @@ const PostPage = () => {
   let { title, tags, content, banner, author: { personal_info: { fullname, username: author_username, profile_img } }, publishedAt } = post;
 
   const fetchPost = () => {
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/get-post", { post_id })
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-post`, { post_id }, {
+      headers: {
+        ...credentialHeaders
+      }
+    })
       .then(async ({ data: { post } }) => {
 
         post.comments = await fetchComments({ post_id: post._id, setParentCommentCountFunc: setTotalParentCommentsLoaded })
 
         setPost(post);
 
-        axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/search-posts", { tag: post.tags[0], limit: 3, eliminate_post: post_id })
+        axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/search-posts`, { tag: post.tags[0], limit: 3, eliminate_post: post_id }, {
+          headers: {
+            ...credentialHeaders
+          }
+        })
           .then(({ data }) => {
             setSimilarPosts(data.posts);
           })

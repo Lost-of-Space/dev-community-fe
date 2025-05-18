@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from "recharts";
 import { UserContext } from "../../App";
 import Loader from "../../components/loader.component";
+
+import { credentialHeaders } from '~/services/credentials';
 
 const PostStatisticsPage = () => {
   const [days, setDays] = useState(14);
@@ -36,7 +38,8 @@ const PostStatisticsPage = () => {
         { days, isAdmin },
         {
           headers: {
-            Authorization: `Bearer ${access_token}`
+            "X-Authorization": `Bearer ${access_token}`,
+            ...credentialHeaders
           }
         }
       );

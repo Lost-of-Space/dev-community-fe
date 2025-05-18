@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import DialogWrapper from "../../components/dialog-window.component";
+import { credentialHeaders } from '~/services/credentials'
 
 const ManageUserCard = ({ user, setUsers }) => {
   const { userAuth, userAuth: { access_token, isAdmin } } = useContext(UserContext);
@@ -22,7 +23,7 @@ const ManageUserCard = ({ user, setUsers }) => {
 
     try {
       const response = await axios.patch(
-        import.meta.env.VITE_SERVER_DOMAIN + "/toggle-user-flag",
+        `${import.meta.env.VITE_SERVER_DOMAIN}/toggle-user-flag`,
         {
           targetUserId,
           isAdmin,
@@ -30,7 +31,8 @@ const ManageUserCard = ({ user, setUsers }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${access_token}`,
+            "X-Authorization": `Bearer ${access_token}`,
+            ...credentialHeaders
           }
         }
       );
@@ -56,7 +58,7 @@ const ManageUserCard = ({ user, setUsers }) => {
 
 
   return (
-    <tr className="border-b border-grey hover:bg-grey/20">
+    <tr className="border-b border-grey hover:bg-grey/20 max-sm:flex flex-col">
       <td className="p-4">
         <div className="flex items-center gap-4">
           <img
@@ -70,29 +72,38 @@ const ManageUserCard = ({ user, setUsers }) => {
           </div>
         </div>
       </td>
+      <hr className="hidden max-sm:block text-grey pt-2" />
 
-      <td className="p-4">
+      <td className="p-4 max-sm:py-1">
         <p>{email}</p>
       </td>
 
-      <td className="p-4">
+      <td className="p-4 max-sm:py-1">
         <p>{new Date(joinedAt).toLocaleDateString()}</p>
       </td>
 
-      <td className="p-4">
+      <td className="p-4 max-sm:hidden">
         <p>{total_posts}</p>
       </td>
 
-      <td className="p-4">
+      <td className="p-4 max-sm:py-1 max-sm:flex gap-2">
         {
           admin ?
             <span className="bg-royalblue/30 text-royalblue py-1 px-2 rounded text-xs">Admin</span>
             :
             <span className="bg-yellow/30 text-yellow py-1 px-3 rounded text-xs">User</span>
         }
+
+        {
+          blocked ?
+            <span className="bg-red/30 text-red py-1 px-2 rounded text-xs sm:hidden">Blocked</span>
+            :
+            ""
+        }
       </td>
 
       <td className="p-4">
+        <hr className="hidden max-sm:block text-grey pb-4" />
         <div className="flex gap-2">
           <DialogWrapper
             onConfirm={() => toggleUserFlag(_id, "admin")}
