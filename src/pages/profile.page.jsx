@@ -12,6 +12,7 @@ import PostCard from "../components/post-card.component";
 import NoDataMessage from "../components/nodata.component";
 import LoadMoreDataBtn from "../components/load-more.component";
 import PageNotFound from "./404.page";
+import { useTranslation } from "react-i18next";
 import { credentialHeaders } from '~/services/credentials'
 
 export const profileDataStructure = {
@@ -32,6 +33,7 @@ export const profileDataStructure = {
 }
 
 const ProfilePage = () => {
+  const { t } = useTranslation();
 
   let { id: profileId } = useParams();
 
@@ -69,7 +71,7 @@ const ProfilePage = () => {
       })
       .catch(err => {
         setLoading(false);
-        return toast.error("Error loading posts..." + err.message);
+        return toast.error(`${t("An error occured")}: ` + err.message);
       })
   }
 
@@ -127,15 +129,15 @@ const ProfilePage = () => {
                 </div>
                 {
                   blocked ?
-                    <p className="bg-red/30 text-red font-bold rounded-sm px-2 py-1">This user is currently blocked.</p>
+                    <p className="bg-red/30 text-red font-bold rounded-sm px-2 py-1">{t("This user is currently blocked")}.</p>
                     : ""
                 }
-                <p>Posts: {total_posts.toLocaleString()} Reads: {total_reads.toLocaleString()}</p>
+                <p>{t("Posts")}: {total_posts.toLocaleString()} {t("Reads")}: {total_reads.toLocaleString()}</p>
 
                 <div className="flex gap-4 mt-2">
                   {
                     profileId == username ?
-                      <Link to="/settings/edit-profile" className="bg-grey text-xl py-3 px-7 hover:bg-black active:bg-black hover:text-white active:text-white selector-white">Edit</Link>
+                      <Link to="/settings/edit-profile" className="bg-grey text-xl py-3 px-7 hover:bg-black active:bg-black hover:text-white active:text-white selector-white">{t("Edit")}</Link>
                       : ""
                   }
                 </div>
@@ -143,7 +145,7 @@ const ProfilePage = () => {
                 <AboutUser className="max-md:hidden" bio={bio} social_links={social_links} joinedAt={joinedAt} />
               </div>
               <div className="max-md:mt-12 w-full">
-                <InPageNavigation routes={["Posts Published", "About"]} defaultHidden={["About"]}>
+                <InPageNavigation routes={[t("Posts Published"), t("About")]} defaultHidden={[t("About")]}>
                   <>
                     {
                       posts == null ? (
@@ -159,7 +161,7 @@ const ProfilePage = () => {
                               );
                             })}
                           </div>
-                          : <NoDataMessage message="No such posts found!" />
+                          : <NoDataMessage message={`${t("No such posts found")}!`} />
                       )
                     }
                     <LoadMoreDataBtn state={posts} fetchDataFunc={getPosts} />

@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
-import { getDay } from "../common/date";
+import { useLocalizedDateUtils } from "../common/date";
+import { useTranslation } from "react-i18next";
 
 const PostCard = ({ content, author, style }) => {
+  const { t } = useTranslation();
+  const { getDay, getFullDay } = useLocalizedDateUtils();
+
   let { publishedAt, tags, title, des, banner, activity: { total_likes }, post_id: id } = content;
   let { fullname, profile_img } = author;
 
@@ -26,7 +30,7 @@ const PostCard = ({ content, author, style }) => {
           {
             isSameDay(publishedAt, new Date()) ?
               <span className="absolute top-3 right-3 text-xs font-semibold text-black bg-white/60 px-2 py-1 rounded-md shadow-sm z-20">
-                Posted Today
+                {t("Posted Today")}
               </span>
               : ""
           }
@@ -78,7 +82,7 @@ const PostCard = ({ content, author, style }) => {
           {
             isSameDay(publishedAt, new Date()) ?
               <span className="absolute top-3 right-3 text-xs font-semibold text-black bg-white/60 px-2 py-1 rounded-md shadow-sm z-20">
-                Posted Today
+                {t("Posted Today")}
               </span>
               : ""
           }
@@ -131,7 +135,7 @@ const PostCard = ({ content, author, style }) => {
           {
             isSameDay(publishedAt, new Date()) ?
               <span className="absolute top-3 right-3 text-xs font-semibold text-black bg-white/60 px-2 py-1 rounded-md shadow-sm z-20">
-                Posted Today
+                {t("Posted Today")}
               </span>
               : ""
           }
@@ -187,7 +191,7 @@ const PostCard = ({ content, author, style }) => {
           {
             isSameDay(publishedAt, new Date()) ?
               <span className="absolute top-3 right-3 text-xs font-semibold text-black bg-white/60 px-2 py-1 rounded-md shadow-sm z-20">
-                Posted Today
+                {t("Posted Today")}
               </span>
               : ""
           }

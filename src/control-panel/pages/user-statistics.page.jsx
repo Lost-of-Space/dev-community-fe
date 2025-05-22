@@ -5,10 +5,12 @@ import {
 } from "recharts";
 import { UserContext } from "../../App";
 import Loader from "../../components/loader.component";
+import { useTranslation } from "react-i18next";
 
 import { credentialHeaders } from '~/services/credentials';
 
 const StatisticsPage = () => {
+  const { t } = useTranslation();
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload?.length) return null;
@@ -16,7 +18,7 @@ const StatisticsPage = () => {
     return (
       <div className="bg-white border border-grey p-2 text-sm text-black drop-shadow-sm">
         <p>{label}</p>
-        <p className="text-royalblue">Users: {payload[0].value}</p>
+        <p className="text-royalblue">{t("Users")}: {payload[0].value}</p>
       </div>
     );
   };
@@ -73,7 +75,7 @@ const StatisticsPage = () => {
       });
 
     } catch (err) {
-      console.error("Error fetching stats:", err);
+      console.error(`${t("An error occured")}:`, err);
     } finally {
       setLoading(false);
     }
@@ -85,9 +87,9 @@ const StatisticsPage = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-xl mb-4 text-dark-grey">Users Registered</h1>
+      <h1 className="text-xl mb-4 text-dark-grey">{t("Users Registered")}</h1>
       <label className="mb-4 flex items-center">
-        Period (days):
+        {t("Period")} ({t("days")}):
         <select className="text-black bg-white outline-none" value={days} onChange={(e) => setDays(Number(e.target.value))}>
           <option value="7">7</option>
           <option value="14">14</option>
@@ -102,7 +104,7 @@ const StatisticsPage = () => {
               onClick={() => setDays(option)}
               className={`btn-filter px-2 py-1 ${days === option ? 'bg-black text-white' : 'bg-grey text-black'}`}
             >
-              {option === 14 ? "2 Weeks" : option === 30 ? "1 Month" : option === 180 ? "Half a Year" : option === 365 ? "1 Year" : `${option} Days`}
+              {option === 14 ? t("2 Weeks") : option === 30 ? t("1 Month") : option === 180 ? t("Half a Year") : option === 365 ? t("1 Year") : `${option} ${t("Days")}`}
             </button>
           ))}
         </div>
@@ -135,7 +137,7 @@ const StatisticsPage = () => {
               >
                 <h1 className="text-xl lg:text-2xl mb-2">{stats[key].toLocaleString()}</h1>
                 <p className="max-lg:text-dark-grey capitalize">
-                  {key === "users_last_days" ? `Users last ${days} days` : key.split("_").join(" ")}
+                  {key === "users_last_days" ? `${t("Users last")} ${days} ${t("Days")}` : key.split("_").join(" ")}
                 </p>
               </div>
             )

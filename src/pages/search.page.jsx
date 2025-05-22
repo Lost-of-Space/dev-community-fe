@@ -9,9 +9,11 @@ import NoDataMessage from "../components/nodata.component";
 import { filterPaginationData } from "../common/filter-pagination-data";
 import LoadMoreDataBtn from "../components/load-more.component";
 import UserCard from "../components/usercard.component";
+import { useTranslation } from "react-i18next";
 import { credentialHeaders } from '~/services/credentials'
 
 const SearchPage = () => {
+    const { t } = useTranslation();
 
     let { query } = useParams()
 
@@ -98,7 +100,7 @@ const SearchPage = () => {
                                 </AnimationWrapper>;
                             })
                             :
-                            <NoDataMessage message="No such user found." />
+                            <NoDataMessage message={`${t("No such user found")}.`} />
                 }
             </>
         )
@@ -108,7 +110,7 @@ const SearchPage = () => {
         <section className="h-cover flex justify-center gap-10">
 
             <div className="w-full">
-                <InPageNavigation routes={[`search results for "${query}"`, "users matched"]} defaultHidden={["users matched"]}
+                <InPageNavigation routes={[`${t("search_search results for")} "${query}"`, t("users matched")]} defaultHidden={[t("users matched")]}
                     panelElements={
                         <div className="flex justify-center items-center ml-auto">
                             <button className="btn-mini w-10 h-10" onClick={changeCardStyle}>
@@ -132,7 +134,7 @@ const SearchPage = () => {
                                         }
                                     </div>
                                     :
-                                    <NoDataMessage message="No such posts found!" />
+                                    <NoDataMessage message={`${t("No such posts found")}!`} />
                             )}
                         <LoadMoreDataBtn state={latestPosts} fetchDataFunc={searchPosts} />
                     </>
@@ -145,7 +147,7 @@ const SearchPage = () => {
             </div>
 
             <div className="min-w-[30%] lg-min-w-[400px] max-w-min border-l border-grey pl-8 pt-3 max-md:hidden">
-                <h1 className="font-medium text-xl mb-8">Users related to search
+                <h1 className="font-medium text-xl mb-8">{t("search_Users related to search")}
                     <span className="fi fi-rr-user ml-2 mt-1"></span>
                 </h1>
 

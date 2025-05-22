@@ -9,8 +9,10 @@ import useCloudinaryUpload from "../common/cloudinary";
 import InputBox from "../components/input.component";
 import { storeInSession } from "../common/session";
 import { credentialHeaders } from '~/services/credentials'
+import { useTranslation } from "react-i18next";
 
 const EditProfilePage = () => {
+  const { t } = useTranslation();
 
   let { userAuth, userAuth: { access_token }, setUserAuth } = useContext(UserContext);
   const { uploading, uploadToCloudinary } = useCloudinaryUpload();
@@ -45,13 +47,13 @@ const EditProfilePage = () => {
     e.preventDefault();
 
     if (updatedProfileImg) {
-      const loadingToast = toast.loading("Uploading...");
+      const loadingToast = toast.loading(`${t("Uploading")}...`);
       e.target.setAttribute("disabled", true);
 
       try {
         const url = await uploadToCloudinary(updatedProfileImg);
         if (url) {
-          console.log("Uploaded image URL:", url);
+          console.log("Uploaded image URL: ", url);
           axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/update-profile-img`, { url }, {
             headers: {
               'X-Authorization': `Bearer ${access_token}`,
@@ -67,16 +69,16 @@ const EditProfilePage = () => {
               setUpdatedProfileImg(null);
               toast.dismiss(loadingToast);
               e.target.removeAttribute("disabled");
-              toast.success("Image Uploaded.")
+              toast.success(`${t("Uploaded")}.`)
             })
             .catch(({ response }) => {
               toast.dismiss(loadingToast);
               e.target.removeAttribute("disabled");
-              toast.error("Upload failed: " + response.data.error);
+              toast.error(`${t("An error occured")}: ` + response.data.error);
             })
         }
       } catch (err) {
-        console.error("Upload failed: ", err);
+        console.error(`${t("An error occured")}: `, err);
       } finally {
         toast.dismiss(loadingToast);
         e.target.removeAttribute("disabled");
@@ -97,13 +99,13 @@ const EditProfilePage = () => {
     let { username, bio, youtube, facebook, twitter, github, instagram, website } = formData;
 
     if (username.length < 3) {
-      return toast.error("Username must be at least 3 chars long.")
+      return toast.error(`${t("Username must be at least 3 chars long")}.`)
     }
     if (bio.length > bioLimit) {
-      return toast.error(`Bio should not be more than ${bioLimit} chars.`)
+      return toast.error(`${t("profile_Bio should not be more than")} ${bioLimit} ${t("profile_chars")}.`)
     }
 
-    let loadingToast = toast.loading("Updating...");
+    let loadingToast = toast.loading(`${t("Updating")}...`);
     e.target.setAttribute("disabled", true);
 
     axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/update-profile`, {
@@ -125,12 +127,12 @@ const EditProfilePage = () => {
 
         toast.dismiss(loadingToast);
         e.target.removeAttribute("disabled");
-        toast.success("Profile Updated.")
+        toast.success(`${t("Profile Updated")}.`)
       })
       .catch(({ response }) => {
         toast.dismiss(loadingToast);
         e.target.removeAttribute("disabled");
-        toast.error("Failed to Update Profile: " + response.data.error)
+        toast.error(`${t("An error occured")}: ` + response.data.error)
       })
   }
 
@@ -154,40 +156,40 @@ const EditProfilePage = () => {
           :
           <form ref={editProfileForm}>
             <Toaster />
-            <h1 className="max-md:hidden text-xl">Edit Profile</h1>
+            <h1 className="max-md:hidden text-xl">{t("Edit Profile")}</h1>
 
             <div className="flex flex-col lg:flex-row items-start py-10 gap-8 lg:gap-10">
 
               <div className="max-lg:center items-center mb-5">
                 <label htmlFor="uploadImg" id="profileImgLbl" className="center relative block w-48 h-48 bg-grey rounded-full overflow-hidden">
                   <div className="w-full h-full absolute top-0 left-0 flex items-center justify-center text-white bg-black/30 opacity-0 hover:opacity-100 cursor-pointer">
-                    Upload Image
+                    {t("Upload Image")}
                   </div>
                   <img ref={profileImgElement} src={profile_img} alt="profile picture" />
                 </label>
 
                 <input type="file" id="uploadImg" onChange={handleImgPreview} accept=".jpeg, .jpg, .png, .gif" hidden />
 
-                <button onClick={handleImgUpload} disabled={updatedProfileImg == null ? true : false} className="btn-light disabled:cursor-not-allowed disabled:opacity-50 mt-5 max-lg:center lg:w-full px-10">Upload Image</button>
+                <button onClick={handleImgUpload} disabled={updatedProfileImg == null ? true : false} className="btn-light disabled:cursor-not-allowed disabled:opacity-50 mt-5 max-lg:center lg:w-full px-10">{t("Upload Image")}</button>
               </div>
 
               <div className="w-full">
                 <div className="grid grid-cols-1 md:grid-cols-2 md:gap-5">
                   <div>
-                    <InputBox name="fullname" type="text" value={fullname} placeholder="Full Name" disabled={true} icon="fi-rr-user" />
+                    <InputBox name="fullname" type="text" value={fullname} placeholder={t("Full Name")} disabled={true} icon="fi-rr-user" />
                   </div>
                   <div>
-                    <InputBox name="email" type="email" value={email} placeholder="Email" disabled={true} icon="fi-rr-envelope" />
+                    <InputBox name="email" type="email" value={email} placeholder={t("Email")} disabled={true} icon="fi-rr-envelope" />
                   </div>
                 </div>
 
-                <InputBox name="username" type="text" value={profile_username} placeholder="Username" icon="fi-rr-at" />
+                <InputBox name="username" type="text" value={profile_username} placeholder={t("Username")} icon="fi-rr-at" />
 
-                <p className="text-dark-grey/70 -mt-3">*Username will be used to search user, it is visible to everyone.</p>
-                <textarea name="bio" maxLength={bioLimit} defaultValue={bio} onChange={handleCharChange} placeholder="Profile Description..." className="input-box h-48 lg:h-40 resize-none leading-7 mt-5 pl-5"></textarea>
+                <p className="text-dark-grey/70 -mt-3">*{t("profile_Username will be used to search user")}, {t("profile_it is visible to everyone")}.</p>
+                <textarea name="bio" maxLength={bioLimit} defaultValue={bio} onChange={handleCharChange} placeholder={`${t("Profile Description")}...`} className="input-box h-48 lg:h-40 resize-none leading-7 mt-5 pl-5"></textarea>
                 <p className="text-dark-grey/70 -mt-1">{charsWritten}/{bioLimit}</p>
 
-                <p className="my-5 text-dark-grey">Social Media</p>
+                <p className="my-5 text-dark-grey">{t("Social Media")}</p>
 
                 <div className="md:grid md:grid-cols-2 gap-x-6">
                   {
@@ -199,7 +201,7 @@ const EditProfilePage = () => {
                   }
                 </div>
 
-                <button className="btn-dark w-auto px-12 max-sm:center" onClick={handleUpdateProfile} type="submit">Update Profile</button>
+                <button className="btn-dark w-auto px-12 max-sm:center" onClick={handleUpdateProfile} type="submit">{t("Update Profile")}</button>
 
               </div>
 

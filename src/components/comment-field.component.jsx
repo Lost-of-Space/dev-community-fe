@@ -3,9 +3,11 @@ import { UserContext } from "../App";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import { PostContext } from "../pages/post.page";
-import {credentialHeaders } from '~/services/credentials'
+import { credentialHeaders } from '~/services/credentials'
+import { useTranslation } from "react-i18next";
 
 const CommentField = ({ action, index = undefined, replyingTo = undefined, setReplying }) => {
+  const { t } = useTranslation();
 
   let { post, post: { _id, author: { _id: post_author }, comments, comments: { results: commentsArr }, activity, activity: { total_comments, total_parent_comments } }, setPost, setTotalParentCommentsLoaded } = useContext(PostContext);
 
@@ -16,10 +18,10 @@ const CommentField = ({ action, index = undefined, replyingTo = undefined, setRe
   const handleComment = () => {
 
     if (!access_token) {
-      return toast.error("Login to leave a comment");
+      return toast.error(t("Login to leave a comment"));
     }
     if (!comment.length) {
-      return toast.error("Comment cannot be empty");
+      return toast.error(t("Comment cannot be empty"));
     }
 
     axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/add-comment`, { _id, post_author, comment, replying_to: replyingTo },
@@ -73,7 +75,7 @@ const CommentField = ({ action, index = undefined, replyingTo = undefined, setRe
   return (
     <>
       <Toaster />
-      <textarea value={comment} className="input-box pl-5 placeholder:text-dark-grey resize-none h-[150px] overflow-auto" placeholder="Write a comment here"
+      <textarea value={comment} className="input-box pl-5 placeholder:text-dark-grey resize-none h-[150px] overflow-auto" placeholder={t("Write a comment here")}
         onChange={(e) => setComment(e.target.value)}>
       </textarea>
       <button onClick={handleComment} className="btn-dark mt-5 px-10 disabled:opacity-50 disabled:cursor-not-allowed" disabled={!comment.trim().length}>{action}</button>

@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { getDay } from "../common/date";
+import { useLocalizedDateUtils } from "../common/date";
 
 const MinimalPostCard = ({ post, index }) => {
+  const { getDay, getFullDay } = useLocalizedDateUtils();
 
   let { title, post_id: id, author: { personal_info: { fullname, profile_img } }, publishedAt } = post;
 

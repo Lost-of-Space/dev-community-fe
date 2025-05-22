@@ -22,16 +22,19 @@ import UserStatisticsPage from "./control-panel/pages/user-statistics.page";
 import PostStatisticsPage from "./control-panel/pages/post-statistics.page";
 import PostsManagementPage from "./control-panel/pages/manage-posts.adm.page";
 import DashboardPage from "./pages/dashboard.page";
+import './i18n';
+import { useTranslation } from "react-i18next";
 
 export const UserContext = createContext({});
 
 export const ThemeContext = createContext({});
 
-const App = () => {
+const darkThemePreference = () => window.matchMedia("(prefers-color-scheme: dark)").matches;
 
+const App = () => {
     const [userAuth, setUserAuth] = useState({});
 
-    const [theme, setTheme] = useState("light");
+    const [theme, setTheme] = useState(() => darkThemePreference() ? "dark" : "light");
 
     useEffect(() => {
 

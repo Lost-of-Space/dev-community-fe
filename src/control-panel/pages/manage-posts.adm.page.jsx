@@ -9,8 +9,11 @@ import { filterPaginationData } from "../../common/filter-pagination-data";
 import SortButton from "../components/sort-button.component";
 import ManagePostsCard from "../components/manage-posts-card.component";
 import { credentialHeaders } from '~/services/credentials'
+import { useTranslation } from "react-i18next";
 
 const PostsManagementPage = () => {
+  const { t } = useTranslation();
+
   let { userAuth: { access_token, isAdmin } } = useContext(UserContext);
 
   const [posts, setPosts] = useState(null);
@@ -110,24 +113,24 @@ const PostsManagementPage = () => {
 
   return (
     <>
-      <h1 className="max-md:hidden text-xl">Manage Posts</h1>
+      <h1 className="max-md:hidden text-xl">{t("Manage Posts")}</h1>
       <Toaster />
 
       <div className="relative max-md:mt-5 md:mt-8 mb-2">
-        <input type="search" onChange={handleSearchChange} onKeyDown={handleSearch} className="input-box search-remove-x" placeholder="Search Posts" />
+        <input type="search" onChange={handleSearchChange} onKeyDown={handleSearch} className="input-box search-remove-x" placeholder={t("Search Posts")} />
         <span className="fi fi-rr-search absolute right-[10%] md:pointer-events-none md:left-5 top-1/2 -translate-y-1/2 text-xl text-dark-grey icon"></span>
       </div>
       <div className="flex gap-2 mb-2 flex-wrap">
-        <p className="text-dark-grey mt-1">Show Only:</p>
+        <p className="text-dark-grey mt-1">{`${t("Show Only")}:`}</p>
         <div className="flex gap-2">
           <button
             onClick={() => toggleFilter("published")}
             className={`btn-filter px-2 py-1 ${query.postFilter.published ? 'bg-black text-white' : 'bg-grey text-black'}`}
-          >Published</button>
+          >{t("Published")}</button>
           <button
             onClick={() => toggleFilter("draft")}
             className={`btn-filter px-2 py-1 ${query.postFilter.draft ? 'bg-black text-white' : 'bg-grey text-black'}`}
-          >Draft</button>
+          >{t("Draft")}</button>
         </div>
       </div>
 
@@ -147,17 +150,17 @@ const PostsManagementPage = () => {
                         sortBy={"title"}
                         fieldState={sortField}
                         orderState={sortOrder}
-                        label="Title"
+                        label={t("Title")}
                       />
                     </th>
-                    <th className="py-3 px-4 border-r border-grey">Author</th>
+                    <th className="py-3 px-4 border-r border-grey">{t("Author")}</th>
                     <th className="border-r border-grey">
                       <SortButton
                         sortFunc={handleSort}
                         sortBy={"publishedAt"}
                         fieldState={sortField}
                         orderState={sortOrder}
-                        label="Published At"
+                        label={t("Published At")}
                       />
                     </th>
                     <th className="border-r border-grey">
@@ -166,11 +169,11 @@ const PostsManagementPage = () => {
                         sortBy={"activity.total_likes"}
                         fieldState={sortField}
                         orderState={sortOrder}
-                        label="Likes"
+                        label={t("Likes")}
                       />
                     </th>
-                    <th className="py-3 px-4 border-r border-grey">Status</th>
-                    <th className="py-3 px-4">Actions</th>
+                    <th className="py-3 px-4 border-r border-grey">{t("Status")}</th>
+                    <th className="py-3 px-4">{t("Actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -196,7 +199,7 @@ const PostsManagementPage = () => {
             />
           </>
         ) : (
-          <NoDataMessage message="No posts found." />
+          <NoDataMessage message={`${t("No posts found")}.`} />
         )
       }
     </>

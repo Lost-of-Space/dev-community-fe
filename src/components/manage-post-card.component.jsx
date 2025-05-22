@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
-import { getDay } from "../common/date";
 import { useContext, useState } from "react";
 import { UserContext } from "../App";
 import axios from "axios";
 import DialogWrapper from "./dialog-window.component";
 import { credentialHeaders } from '~/services/credentials'
+import { useTranslation } from "react-i18next";
+import { useLocalizedDateUtils } from "../common/date";
 
 const PostStats = ({ stats }) => {
   return (
@@ -23,6 +24,8 @@ const PostStats = ({ stats }) => {
 }
 
 export const ManagePublishedPostCard = ({ post }) => {
+  const { getDay, getFullDay } = useLocalizedDateUtils();
+  const { t } = useTranslation();
 
   let { banner, post_id, title, publishedAt, activity } = post;
 
@@ -39,20 +42,19 @@ export const ManagePublishedPostCard = ({ post }) => {
           <div>
             <Link to={`/post/${post_id}`} className="post-title mb-4 hover:underline">{title}</Link>
 
-            <p className="line-clamp-1">Published on {getDay(publishedAt)}</p>
+            <p className="line-clamp-1">{t("Published on")} {getDay(publishedAt)}</p>
           </div>
 
           <div className="flex gap-6 mt-3">
-            <Link to={`/editor/${post_id}`} className="pt-4 py-2 underline">Edit</Link>
+            <Link to={`/editor/${post_id}`} className="pt-4 py-2 underline">{t("Edit")}</Link>
 
-            <button onClick={() => setShowStats(preVal => !preVal)} className="lg:hidden pt-4 py-2 underline">Stats</button>
+            <button onClick={() => setShowStats(preVal => !preVal)} className="lg:hidden pt-4 py-2 underline">{t("Stats")}</button>
 
             <DialogWrapper
               onConfirm={(e) => deletePost(post, access_token)}
-              message={<p>Are you sure you want to <span className="text-red bg-red/30 px-2">delete</span> this post? <span className="block">This action cannot be undone.</span></p>}
-              confirmText={"Confirm"}
+              message={<p>{t("Are you sure you want to")} <span className="text-red bg-red/30 px-2">{t("Delete")}</span> {t("this post?")} <span className="block">{`${t("This action cannot be undone")}.`}</span></p>}
             >
-              <button className="pt-4 py-2 underline text-red">Delete</button>
+              <button className="pt-4 py-2 underline text-red">{t("Delete")}</button>
             </DialogWrapper>
           </div>
 
@@ -76,6 +78,7 @@ export const ManagePublishedPostCard = ({ post }) => {
 }
 
 export const ManageDraftPostCard = ({ post }) => {
+  const { t } = useTranslation();
 
   let { title, des, post_id, index } = post;
 
@@ -89,16 +92,15 @@ export const ManageDraftPostCard = ({ post }) => {
 
       <div>
         <h1 className="post-title mb-3">{title}</h1>
-        <p className="line-clamp-2">{des.length ? des : "No description"}</p>
+        <p className="line-clamp-2">{des.length ? des : t("No description")}</p>
 
         <div className="flex gap-6 mt-3">
-          <Link to={`/editor/${post_id}`} className="pt-4 py-2 underline">Edit</Link>
+          <Link to={`/editor/${post_id}`} className="pt-4 py-2 underline">{t("Edit")}</Link>
           <DialogWrapper
             onConfirm={(e) => deletePost(post, access_token)}
-            message={<p>Are you sure you want to <span className="text-red bg-red/30 px-2">delete</span> this post? <span className="block">This action cannot be undone.</span></p>}
-            confirmText={"Confirm"}
+            message={<p>{t("Are you sure you want to")} <span className="text-red bg-red/30 px-2">{t("Delete")}</span> {t("this post?")} <span className="block">{`${t("This action cannot be undone")}.`}</span></p>}
           >
-            <button className="pt-4 py-2 underline text-red">Delete</button>
+            <button className="pt-4 py-2 underline text-red">{t("Delete")}</button>
           </DialogWrapper>
         </div>
       </div>

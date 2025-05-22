@@ -10,9 +10,11 @@ import AnimationWrapper from "../common/page-animation";
 import { ManageDraftPostCard, ManagePublishedPostCard } from "../components/manage-post-card.component";
 import LoadMoreDataBtn from "../components/load-more.component";
 import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { credentialHeaders } from '~/services/credentials'
 
 const ManagePostsPage = () => {
+  const { t } = useTranslation();
 
   let { userAuth: { access_token } } = useContext(UserContext);
 
@@ -84,15 +86,15 @@ const ManagePostsPage = () => {
 
   return (
     <>
-      <h1 className="max-md:hidden text-xl">Manage Posts</h1>
+      <h1 className="max-md:hidden text-xl">{t("Manage Posts")}</h1>
       <Toaster />
 
       <div className="relative max-md:mt-5 md:mt-8 mb-10">
-        <input type="search" onChange={handleSearchChange} onKeyDown={handleSearch} className="input-box search-remove-x" placeholder="Search Posts" />
+        <input type="search" onChange={handleSearchChange} onKeyDown={handleSearch} className="input-box search-remove-x" placeholder={t("Search Posts")} />
         <span className="fi fi-rr-search absolute right-[10%] md:pointer-events-none md:left-5 top-1/2 -translate-y-1/2 text-xl text-dark-grey icon"></span>
       </div>
 
-      <InPageNavigation routes={["Published", "Drafts"]} defaultIndex={activeTab != 'draft' ? 0 : 1}>
+      <InPageNavigation routes={[t("Published"), t("Drafts")]} defaultIndex={activeTab != 'draft' ? 0 : 1}>
 
         { //published
           posts == null ? <Loader />
@@ -110,7 +112,7 @@ const ManagePostsPage = () => {
                 <LoadMoreDataBtn className="my-4" state={posts} fetchDataFunc={getPosts} additionalParam={{ draft: false, deletedDocCount: posts.deletedDocCount }} />
               </>
               :
-              <NoDataMessage message="No posts published yet." />
+              <NoDataMessage message={`${t("No posts published yet")}.`} />
         }
 
         { //draft
@@ -129,7 +131,7 @@ const ManagePostsPage = () => {
                 <LoadMoreDataBtn className="my-4" state={drafts} fetchDataFunc={getPosts} additionalParam={{ draft: true, deletedDocCount: drafts.deletedDocCount }} />
               </>
               :
-              <NoDataMessage message="No draft posts yet." />
+              <NoDataMessage message={`${t("No draft posts yet")}.`} />
         }
 
       </InPageNavigation>

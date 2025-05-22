@@ -7,7 +7,7 @@ import Quote from "@editorjs/quote";
 import Marker from "@editorjs/marker";
 import InlineCode from "@editorjs/inline-code";
 import { toast } from "react-hot-toast";
-
+import { useTranslation } from "react-i18next";
 
 // Uploading via URL
 const uploadImageByURL = (e) => {
@@ -33,9 +33,11 @@ const uploadImageByURL = (e) => {
 const MAX_FILE_SIZE_MB = 4;
 
 const uploadImageByFile = (file) => {
+  const { t } = useTranslation();
+
   return new Promise((resolve, reject) => {
     if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-      toast.error(`File size exceeds ${MAX_FILE_SIZE_MB} MB`);
+      toast.error(`${t("File size exceeds")} ${MAX_FILE_SIZE_MB} MB`);
       reject(new Error(`File size exceeds ${MAX_FILE_SIZE_MB} MB`));
       return;
     }
@@ -53,18 +55,18 @@ const uploadImageByFile = (file) => {
       .then((data) => {
         if (data.secure_url) {
           const optimizedUrl = `${data.secure_url}?c_fill&auto=webp&quality=auto`;
-          toast.success('Uploaded');
+          toast.success(t("Uploaded"));
           resolve({
             success: 1,
             file: { url: optimizedUrl }
           });
         } else {
-          toast.error('Image upload failed!');
-          reject(new Error('Image upload failed!'));
+          toast.error(t(`${t("An error occured")}...`));
+          reject(new Error('Image upload failed'));
         }
       })
       .catch((error) => {
-        toast.error('Error uploading image');
+        toast.error(t(`${t("An error occured")}: ${error}`));
         reject(error);
       });
   });
@@ -72,33 +74,37 @@ const uploadImageByFile = (file) => {
 
 
 // Tools config
-export const tools = {
-  embed: Embed,
-  list: {
-    class: List,
-    inlineToolbar: true,
-  },
-  image: {
-    class: Image,
-    config: {
-      uploader: {
-        uploadByUrl: uploadImageByURL,
-        uploadByFile: uploadImageByFile,
+export const tools = () => {
+  const { t } = useTranslation();
+
+  return {
+    embed: Embed,
+    list: {
+      class: List,
+      inlineToolbar: true,
+    },
+    image: {
+      class: Image,
+      config: {
+        uploader: {
+          uploadByUrl: uploadImageByURL,
+          uploadByFile: uploadImageByFile,
+        },
       },
     },
-  },
-  header: {
-    class: Header,
-    config: {
-      placeholder: "Type Heading...",
-      levels: [1, 2, 3],
-      defaultLevel: 2,
+    header: {
+      class: Header,
+      config: {
+        placeholder: `${t("Type Heading")}...`,
+        levels: [1, 2, 3],
+        defaultLevel: 2,
+      },
     },
-  },
-  quote: {
-    class: Quote,
-    inlineToolbar: true,
-  },
-  marker: Marker,
-  inlineCode: InlineCode
+    quote: {
+      class: Quote,
+      inlineToolbar: true,
+    },
+    marker: Marker,
+    inlineCode: InlineCode
+  }
 };

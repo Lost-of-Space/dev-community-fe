@@ -9,8 +9,10 @@ import { filterPaginationData } from "../../common/filter-pagination-data";
 import ManageUserCard from "../components/manage-user-card.component";
 import SortButton from "../components/sort-button.component";
 import { credentialHeaders } from '~/services/credentials'
+import { useTranslation } from "react-i18next";
 
 const ManageUsersPage = () => {
+  const { t } = useTranslation();
 
   let { userAuth: { access_token, isAdmin } } = useContext(UserContext);
 
@@ -112,28 +114,28 @@ const ManageUsersPage = () => {
 
   return (
     <>
-      <h1 className="max-md:hidden text-xl">Manage Users</h1>
+      <h1 className="max-md:hidden text-xl">{t("Manage Users")}</h1>
       <Toaster />
 
       <div className="relative max-md:mt-5 md:mt-8 mb-2">
-        <input type="search" onChange={handleSearchChange} onKeyDown={handleSearch} className="input-box search-remove-x" placeholder="Search Users" />
+        <input type="search" onChange={handleSearchChange} onKeyDown={handleSearch} className="input-box search-remove-x" placeholder={t("Search Users")} />
         <span className="fi fi-rr-search absolute right-[10%] md:pointer-events-none md:left-5 top-1/2 -translate-y-1/2 text-xl text-dark-grey icon"></span>
       </div>
       <div className="flex gap-2 mb-2 flex-wrap">
-        <p className="text-dark-grey mt-1">Show Only:</p>
+        <p className="text-dark-grey mt-1">{`${t("Show Only")}:`}</p>
         <div className="flex gap-2">
           <button
             onClick={() => toggleFilter("admin")}
             className={`btn-filter px-2 py-1 ${query.userFilter.admin ? 'bg-black text-white' : 'bg-grey text-black'}`}
-          >Admins</button>
+          >{t("Admins")}</button>
           <button
             onClick={() => toggleFilter("user")}
             className={`btn-filter px-2 py-1 ${query.userFilter.user ? 'bg-black text-white' : 'bg-grey text-black'}`}
-          >Users</button>
+          >{t("Users")}</button>
           <button
             onClick={() => toggleFilter("blocked")}
             className={`btn-filter px-2 py-1 ${query.userFilter.blocked ? 'bg-black text-white' : 'bg-grey text-black'}`}
-          >Blocked</button>
+          >{t("tb_blocked")}</button>
         </div>
       </div>
 
@@ -147,17 +149,17 @@ const ManageUsersPage = () => {
                   <thead>
                     <tr className="border-b border-grey text-left">
                       <th className="border-r border-grey">
-                        <SortButton sortFunc={handleSort} sortBy={"personal_info.username"} fieldState={sortField} orderState={sortOrder} label="User" />
+                        <SortButton sortFunc={handleSort} sortBy={"personal_info.username"} fieldState={sortField} orderState={sortOrder} label={t("tb_User")} />
                       </th>
-                      <th className="py-3 px-4 border-r border-grey">Email</th>
+                      <th className="py-3 px-4 border-r border-grey">{t("Email")}</th>
                       <th className="border-r border-grey">
-                        <SortButton sortFunc={handleSort} sortBy={"joinedAt"} fieldState={sortField} orderState={sortOrder} label="Joined At" />
+                        <SortButton sortFunc={handleSort} sortBy={"joinedAt"} fieldState={sortField} orderState={sortOrder} label={t("Joined At")} />
                       </th>
                       <th className="border-r border-grey">
-                        <SortButton sortFunc={handleSort} sortBy={"account_info.total_posts"} fieldState={sortField} orderState={sortOrder} label="Posts" />
+                        <SortButton sortFunc={handleSort} sortBy={"account_info.total_posts"} fieldState={sortField} orderState={sortOrder} label={t("Posts")} />
                       </th>
-                      <th className="py-3 px-4 border-r border-grey">Role</th>
-                      <th className="py-3 px-4">Actions</th>
+                      <th className="py-3 px-4 border-r border-grey">{t("Role")}</th>
+                      <th className="py-3 px-4">{t("Actions")}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -178,7 +180,7 @@ const ManageUsersPage = () => {
               <LoadMoreDataBtn className="my-4" state={users} fetchDataFunc={getUsers} additionalParam={{ draft: false, deletedDocCount: users.deletedDocCount }} />
             </>
           ) : (
-            <NoDataMessage message="No users found." />
+            <NoDataMessage message={`${t("No users found")}.`} />
           )
       }
 

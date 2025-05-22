@@ -1,12 +1,16 @@
 import { Link } from "react-router-dom";
-import { getDay } from "../common/date";
 import { useContext, useState } from "react";
 import NotificationCommentField from "./notification-comment-field.component";
 import { UserContext } from "../App";
 import axios from "axios";
-import {credentialHeaders } from '~/services/credentials'
+import { credentialHeaders } from '~/services/credentials'
+import { useTranslation } from "react-i18next";
+import { useLocalizedDateUtils } from "../common/date";
 
 const NotificationCard = ({ data, index, notificationState }) => {
+  const { getDay, getFullDay } = useLocalizedDateUtils();
+
+  const { t } = useTranslation();
 
   let [isReplying, setIsReplying] = useState();
 
@@ -56,9 +60,9 @@ const NotificationCard = ({ data, index, notificationState }) => {
             <Link to={`/user/${username}`} className="hover:underline hover:text-royalblue max-sm:underline active:text-royalblue mx-1 text-black">@{username}</Link>
             <span className="font-normal">
               {
-                type == 'like' ? " liked your post" :
-                  type == 'comment' ? " commented on" :
-                    " replied on"
+                type == 'like' ? ` ${t("liked your post")}` :
+                  type == 'comment' ? ` ${t("commented on")}` :
+                    ` ${t("replied on")}`
               }
             </span>
           </h1>
@@ -86,11 +90,11 @@ const NotificationCard = ({ data, index, notificationState }) => {
             <>
               {
                 !reply ?
-                  <button onClick={handleReply} className="hover:text-black">Reply</button>
+                  <button onClick={handleReply} className="hover:text-black">{t("Reply")}</button>
                   :
                   ""
               }
-              <button onClick={(e) => handleDelete(comment._id, "comment", e.target)} className="hover:text-black select-none disabled:opacity-50 disabled:cursor-not-allowed">Delete</button>
+              <button onClick={(e) => handleDelete(comment._id, "comment", e.target)} className="hover:text-black select-none disabled:opacity-50 disabled:cursor-not-allowed">{t("Delete")}</button>
             </>
             : ""
         }
@@ -114,14 +118,14 @@ const NotificationCard = ({ data, index, notificationState }) => {
               <div>
                 <h1 className="font-medium text-xl text-dark-grey">
                   <Link to={`/user/${author_username}`} className="hover:underline hover:text-royalblue max-sm:underline active:text-royalblue mx-1 text-black">@{author_username}</Link>
-                  <span className="font-normal"> replied to </span>
+                  <span className="font-normal"> {t("replied to")} </span>
                   <Link to={`/user/${username}`} className="hover:underline hover:text-royalblue max-sm:underline active:text-royalblue mx-1 text-black">@{username}</Link>
                 </h1>
               </div>
             </div>
             <p className="ml-14 text-xl mt-2 mb-1">{reply.comment}</p>
 
-            <button onClick={(e) => handleDelete(reply._id, "reply", e.target)} className="hover:text-black ml-14 mt-2 select-none disabled:opacity-50 disabled:cursor-not-allowed">Delete</button>
+            <button onClick={(e) => handleDelete(reply._id, "reply", e.target)} className="hover:text-black ml-14 mt-2 select-none disabled:opacity-50 disabled:cursor-not-allowed">{t("Delete")}</button>
           </div>
           :
           ""

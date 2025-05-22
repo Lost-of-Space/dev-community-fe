@@ -1,14 +1,17 @@
 import toast from "react-hot-toast";
 import { UserContext } from "../App";
-import { getDay } from "../common/date";
 import { useContext, useState } from "react";
 import CommentField from "./comment-field.component";
 import { PostContext } from "../pages/post.page";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
+import { useLocalizedDateUtils } from "../common/date";
 
 import { credentialHeaders } from '~/services/credentials'
 
 const CommentCard = ({ index, leftVal, commentData }) => {
+  const { getDay, getFullDay } = useLocalizedDateUtils();
+  const { t } = useTranslation();
 
   let { commented_by: { personal_info: { profile_img, fullname, username: commented_by_username } }, commentedAt, comment, _id, children } = commentData;
 
@@ -118,7 +121,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 
   const handleReplyClick = () => {
     if (!access_token) {
-      return toast.error("Login to reply.")
+      return toast.error(t("Login to leave a comment"));
     }
 
     setReplying(preVal => !preVal);
@@ -129,7 +132,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 
     let button = <button onClick={() => loadReplies({ skip: index - parentIndex, currentIndex: parentIndex })}
       className="text-dark-grey p-2 px-3 hover:bg-grey/30 rounded-md flex items-center gap-2"
-    >Load more Replies</button>
+    >{t("Load more Replies")}</button>
 
     if (commentsArr[index + 1]) {
       if (commentsArr[index + 1].childrenLevel < commentsArr[index].childrenLevel) {
@@ -164,12 +167,12 @@ const CommentCard = ({ index, leftVal, commentData }) => {
           {
             commentData.isReplyLoaded ?
               <button onClick={hideReplies} className="text-dark-grey p-2 px-3 hover:bg-grey/30 flex items-center gap-2">
-                <span className="fi fi-br-comment-dots"></span> Hide Replies
+                <span className="fi fi-br-comment-dots"></span> {t("Hide Replies")}
               </button>
               :
               children.length ?
                 <button onClick={loadReplies} className="text-dark-grey p-2 px-3 hover:bg-grey/30 flex items-center gap-2">
-                  <span className="fi fi-br-comment-dots"></span> Show Replies ({children.length})
+                  <span className="fi fi-br-comment-dots"></span> {t("Show Replies")} ({children.length})
                 </button>
                 :
                 ""

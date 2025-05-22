@@ -3,13 +3,15 @@ import { createContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import AnimationWrapper from "../common/page-animation";
 import Loader from "../components/loader.component";
-import { getDay } from "../common/date";
 import PostInteraction from "../components/post-interaction.component";
 import PostCard from "../components/post-card.component";
 import PostContent from "../components/post-content.component";
 import CommentsContainer from "../components/comments.component";
 import { fetchComments } from "../components/comments.component";
 import { credentialHeaders } from '~/services/credentials'
+import { useTranslation } from "react-i18next";
+import { useLocalizedDateUtils } from "../common/date";
+
 
 export const postStructure = {
   title: '',
@@ -23,6 +25,8 @@ export const postStructure = {
 export const PostContext = createContext({})
 
 const PostPage = () => {
+  const { getDay, getFullDay } = useLocalizedDateUtils();
+  const { t } = useTranslation();
 
   let { post_id } = useParams()
 
@@ -112,7 +116,7 @@ const PostPage = () => {
                       </span>
                     </p>
                   </div>
-                  <p className="text-dark-grey opacity-75 max-sm:mt-6 max-sm:ml-12 max-sm:pl-5">Published on {getDay(publishedAt)}</p>
+                  <p className="text-dark-grey opacity-75 max-sm:mt-6 max-sm:ml-12 max-sm:pl-5">{t("Published on")} {getDay(publishedAt)}</p>
                 </div>
               </div>
               <PostInteraction />
@@ -132,7 +136,7 @@ const PostPage = () => {
               {
                 similarPosts != null && similarPosts.length ?
                   <>
-                    <h1 className="text-2xl mt-14 mb-10 font-medium">Check similar posts:</h1>
+                    <h1 className="text-2xl mt-14 mb-10 font-medium">{t("Check similar posts")}:</h1>
                     {
                       similarPosts.map((post, i) => {
                         let { author: { personal_info } } = post;

@@ -6,9 +6,11 @@ import Tag from "./tags.component";
 import axios from "axios";
 import { UserContext } from "../App";
 import { useNavigate, useParams } from "react-router-dom";
-import {credentialHeaders } from '~/services/credentials'
+import { credentialHeaders } from '~/services/credentials'
+import { useTranslation } from "react-i18next";
 
 const PublishForm = () => {
+  const { t } = useTranslation();
 
   let characterLimit = 200;
   let tagLimit = 10;
@@ -55,10 +57,10 @@ const PublishForm = () => {
           setPost({ ...post, tags: [...tags, tag] })
         }
         if (tags.includes(tag)) {
-          toast.error("Tag must be unique!")
+          toast.error(`${t("Tag must be unique")}!`)
         }
       } else {
-        toast.error(`Max tag count is ${tagLimit}`)
+        toast.error(`${t("Max tag count is")} ${tagLimit}`)
       }
       e.target.value = "";
     }
@@ -71,18 +73,18 @@ const PublishForm = () => {
     }
 
     if (!title.length) {
-      return toast.error("Post must have a title.")
+      return toast.error(`${t("Post must have a title")}.`)
     }
 
     if (!des.length || des.length > characterLimit) {
-      return toast.error("Post must have a description.")
+      return toast.error(`${t("Post must have a description")}.`)
     }
 
     if (!tags.length) {
-      return toast.error("Post must have at least 1 tag.")
+      return toast.error(`${t("Post must have at least 1 tag")}.`)
     }
 
-    let publishingToast = toast.loading("Publishing...")
+    let publishingToast = toast.loading(`${t("Publishing")}...`)
 
     e.target.classList.add('disable');
 
@@ -102,7 +104,7 @@ const PublishForm = () => {
         e.target.classList.remove('disable');
 
         toast.dismiss(publishingToast);
-        toast.success("Published");
+        toast.success(t("Published"));
 
         setTimeout(() => {
           navigate("/dashboard/posts")
@@ -113,7 +115,7 @@ const PublishForm = () => {
         e.target.classList.remove('disable');
 
         toast.dismiss(publishingToast);
-        return toast.error("An error occured " + response.data.error);
+        return toast.error(`${t("An error occured")}: ` + response.data.error);
       })
 
   }
@@ -131,7 +133,7 @@ const PublishForm = () => {
         </button>
 
         <div className="max-w-[550px] center">
-          <p className="text-dark-grey mb-1">Preview</p>
+          <p className="text-dark-grey mb-1">{t("Preview")}</p>
           <div className="w-full aspect-video rounded-lg overflow-hidden bg-grey mt-4">
             <img src={banner} alt="banner preview" />
           </div>
@@ -140,12 +142,12 @@ const PublishForm = () => {
         </div>
 
         <div className="border-grey lg:border-1 lg:pl-8">
-          <p className="text-dark-grey mb-2 mt-9">Post title</p>
+          <p className="text-dark-grey mb-2 mt-9">{t("Post Title")}</p>
           <input type="text" placeholder="Post Title" className="input-box pl-4"
             defaultValue={title} onChange={handlePostTitleChange}
           />
 
-          <p className="text-dark-grey mb-2 mt-9">Short description</p>
+          <p className="text-dark-grey mb-2 mt-9">{t("Short Description")}</p>
 
           <textarea maxLength={characterLimit} defaultValue={des}
             className="h-40 resize-none leading-7 input-box pl-4"
@@ -155,7 +157,7 @@ const PublishForm = () => {
           </textarea>
 
           <p className="mt-1 text-dark-grey text-sm text-right">{des.length}/{characterLimit}</p>
-          <p className="text-dark-grey mb-2 mt-9">*Topics helps in searching and ranking your post</p>
+          <p className="text-dark-grey mb-2 mt-9">*{t("Topics helps in searching and ranking your post")}</p>
 
           <div className="relative input-box pl-2 py-2 pb-4">
             <input type="text" placeholder="Tag"
@@ -172,7 +174,7 @@ const PublishForm = () => {
 
           <button className="btn-dark px-8"
             onClick={publishPost}
-          >Publish</button>
+          >{t("Publish")}</button>
         </div>
 
       </section>

@@ -3,19 +3,23 @@ import AnimationWrapper from "../common/page-animation";
 import InputBox from "../components/input.component";
 import googleIcon from "../imgs/google.svg";
 import githubIcon from "../imgs/github.svg";
+import githubIcon_white from "../imgs/github_white.svg";
 import { Navigate } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast"; //notification lib
 import axios from "axios";
 import { storeInSession } from "../common/session";
-import { UserContext } from "../App";
+import { ThemeContext, UserContext } from "../App";
 import { authWithGoogle, authWithGithub } from "../common/firebase";
 import TextAnimationWrap from "../common/text-animation";
+import { useTranslation } from "react-i18next";
 
 import { credentialHeaders } from '~/services/credentials'
 
 const UserAuthForm = ({ type }) => {
+  const { t } = useTranslation();
 
   let { userAuth: { access_token }, setUserAuth } = useContext(UserContext)
+  let { theme } = useContext(ThemeContext);
 
   const userAuthThroughServer = (serverRoute, formData) => {
 
@@ -30,7 +34,7 @@ const UserAuthForm = ({ type }) => {
       })
       .catch((error) => {
         const errorMsg = error?.response?.data?.error || "Something went wrong.";
-        toast.error(errorMsg);
+        toast.error(`${t("An error occured")}: ${errorMsg}`);
       })
 
   }
@@ -58,20 +62,20 @@ const UserAuthForm = ({ type }) => {
     //Data validation
     if (fullname) {
       if (fullname.length < 4) {
-        return toast.error("Fullname must be at least 4 letters long.")
+        return toast.error(`${t("Fullname must be at least 4 letters long")}.`)
       }
     }
 
     if (!email.length) {
-      return toast.error("Enter email.")
+      return toast.error(`${t("Enter email")}.`)
     }
 
     if (!emailRegex.test(email)) {
-      return toast.error("Email is invalid.")
+      return toast.error(`${t("Email is invalid")}.`)
     }
 
     if (!passwordRegex.test(password)) {
-      return toast.error("Password should be 6 to 20 chars long with a numeric, lower case and upper case.")
+      return toast.error(`${t("Password should be 6 to 20 chars long with at least 1 numeric, 1 lowercase and 1 uppercase letters")}.`)
     }
 
     userAuthThroughServer(serverRoute, formData);
@@ -92,7 +96,7 @@ const UserAuthForm = ({ type }) => {
 
     })
       .catch(err => {
-        return toast.error('Error login with google');
+        return toast.error(`${t("An error occured")}: ${err}`);
       })
   }
 
@@ -110,7 +114,7 @@ const UserAuthForm = ({ type }) => {
 
     })
       .catch(err => {
-        return toast.error('Error login with github');
+        return toast.error(`${t("An error occured")}: ${err}`);
       })
   }
 
@@ -124,8 +128,8 @@ const UserAuthForm = ({ type }) => {
 
           <div className={"rounded-full absolute z-20 flex items-center justify-center select-none max-md:hidden max-lg:hidden h-[160%] w-[85%] " + (type == "sign-in" ? "animate-slideToLeft -right-[40%]  bg-gradient-to-tl from-50%" : "animate-slideToRight -left-[40%]  bg-gradient-to-br from-50%") + " from-black to-black/60"}>
             <div className={(type == "sign-in" ? "mr-[50%]" : "ml-[50%]")}>
-              <h2 className="text-white font-bold text-2xl mb-4">{type == "sign-in" ? "Nice to see you again!" : "For first time here?"}</h2>
-              <p className="text-white/80 text-xl">{type == "sign-in" ? "Log in to continue your Adventure!)" : "Register to start your Adventure!"}</p>
+              <h2 className="text-white font-bold text-2xl mb-4">{type == "sign-in" ? t("Nice to see you again!") : t("For first time here?")}</h2>
+              <p className="text-white/80 text-xl">{type == "sign-in" ? t("Log in to continue your Adventure!)") : t("Register to start your Adventure!")}</p>
             </div>
           </div>
 
@@ -133,9 +137,9 @@ const UserAuthForm = ({ type }) => {
 
             <h1 className="font-monospace text-center mb-24">
               {type == "sign-in" ?
-                <TextAnimationWrap text="Welcome back" className="text-4xl" />
+                <TextAnimationWrap text={t("Welcome back")} className="text-4xl" />
                 :
-                <TextAnimationWrap text="Register now" className="text-4xl" />
+                <TextAnimationWrap text={t("Register now")} className="text-4xl" />
               }
             </h1>
 
@@ -144,7 +148,7 @@ const UserAuthForm = ({ type }) => {
                 <InputBox
                   name="fullname"
                   type="text"
-                  placeholder="Full name"
+                  placeholder={t("Full Name")}
                   icon="fi-rr-user"
                 />
                 : ""
@@ -153,14 +157,14 @@ const UserAuthForm = ({ type }) => {
             <InputBox
               name="email"
               type="email"
-              placeholder="Email"
+              placeholder={t("Email")}
               icon="fi-rr-at"
             />
 
             <InputBox
               name="password"
               type="password"
-              placeholder="Password"
+              placeholder={t("Password")}
               icon="fi-rr-key"
             />
 
@@ -170,7 +174,7 @@ const UserAuthForm = ({ type }) => {
 
             <div className="relative w-full flex items-center gap-2 my-10 opacity-10 uppercase text-black font-bold">
               <hr className="w-1/2 border-black"></hr>
-              <p>or</p>
+              <p>{t("auth_or")}</p>
               <hr className="w-1/2 border-black"></hr>
             </div>
 
@@ -183,7 +187,7 @@ const UserAuthForm = ({ type }) => {
               <button className="btn-light flex items-center justify-center gap-4 w-[35%] center"
                 onClick={handleGithubAuth}>
                 Github
-                <img src={githubIcon} className="w-9 -mx-1" alt="google-logo" />
+                <img src={theme == "light" ? githubIcon : githubIcon_white} className="w-9 -mx-1" alt="google-logo" />
               </button>
             </div>
 

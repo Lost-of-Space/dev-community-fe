@@ -5,8 +5,11 @@ import axios from "axios";
 import { NavLink } from "react-router-dom";
 import DialogWrapper from "../../components/dialog-window.component";
 import { credentialHeaders } from '~/services/credentials'
+import { useTranslation } from "react-i18next";
 
 const ManagePostCard = ({ post, setPosts }) => {
+  const { t } = useTranslation();
+
   const { userAuth: { access_token, isAdmin } } = useContext(UserContext);
 
   const {
@@ -37,26 +40,25 @@ const ManagePostCard = ({ post, setPosts }) => {
         deletedDocCount: prevPosts.deletedDocCount + 1
       }));
 
-      toast.success("Post deleted successfully");
+      toast.success(t("Deleted"));
 
     } catch (error) {
-      console.error("Failed to delete post:", error);
-      toast.error(error.response?.data?.error || "Failed to delete post");
+      toast.error(error.response?.data?.error || `${t("An error occured")}: ${error}`);
     }
   };
 
   return (
     <tr className="border-b border-grey hover:bg-grey/20 max-sm:flex flex-col max-sm:mb-4">
-      <td className="p-4 max-sm:py-2 max-sm:pt-3 max-w-[15rem]">
+      <td className="p-4 max-sm:py-2 max-sm:pt-3 sm:max-w-[15rem]">
         <NavLink to={`/post/${post_id}`} className="line-clamp-1 text-dark-grey max-sm:text-xl max-sm:text-black hover:underline active:underline">
           {title}
         </NavLink>
       </td>
-      <hr className="hidden max-sm:block text-grey my-1" />
+      <div className="hidden max-sm:block h-px bg-grey my-1"></div>
 
       <td className="p-4 max-sm:py-1">
         <NavLink to={`/user/${username}`} className="text-dark-grey hover:underline active:underline">
-          <span className="hidden max-sm:inline-block text-black">By</span> @{username}
+          <span className="hidden max-sm:inline-block text-black">{t("By")}</span> @{username}
         </NavLink>
       </td>
 
@@ -78,14 +80,14 @@ const ManagePostCard = ({ post, setPosts }) => {
       </td>
 
       <td className="p-4">
-        <hr className="hidden max-sm:block text-grey pb-3" />
+        <div className="hidden max-sm:block h-px bg-grey mb-3"></div>
         <DialogWrapper
           onConfirm={() => deletePost(post_id)}
-          message={<p>Are you sure you want to delete post <span className="text-royalblue">"{title}"</span>?</p>}
-          confirmText={"Delete"}
+          message={<p>{t("Are you sure you want to delete post")} <span className="text-royalblue">"{title}"</span>?</p>}
+          confirmText={t("Delete")}
         >
           <button className="hover:bg-red/30 hover:text-red px-2 py-1 rounded">
-            Delete
+            {t("Delete")}
           </button>
         </DialogWrapper>
       </td>

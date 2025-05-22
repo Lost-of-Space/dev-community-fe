@@ -8,8 +8,10 @@ import NoDataMessage from "../components/nodata.component";
 import NotificationCard from "../components/notification-card.component";
 import LoadMoreDataBtn from "../components/load-more.component";
 import { credentialHeaders } from '~/services/credentials'
+import { useTranslation } from "react-i18next";
 
 const NotificationsPage = () => {
+  const { t } = useTranslation();
 
   const [filter, setFilter] = useState("all");
   const [notifications, setNotifications] = useState(null);
@@ -17,10 +19,10 @@ const NotificationsPage = () => {
   let { userAuth, userAuth: { access_token, new_notification_available }, setUserAuth } = useContext(UserContext);
 
   const filters = [
-    { value: "all", label: "All" },
-    { value: "like", label: "Likes" },
-    { value: "comment", label: "Comments" },
-    { value: "reply", label: "Replies" },
+    { value: "all", label: t("All") },
+    { value: "like", label: t("Likes") },
+    { value: "comment", label: t("Comments") },
+    { value: "reply", label: t("Replies") },
   ];
 
 
@@ -67,7 +69,7 @@ const NotificationsPage = () => {
 
   return (
     <div>
-      <h1 className="max-md:hidden text-xl">Recent Notifications</h1>
+      <h1 className="max-md:hidden text-xl">{t("Recent Notifications")}</h1>
 
       <div className="my-8 flex gap-6 max-sm:gap-2">
         {
@@ -96,7 +98,7 @@ const NotificationsPage = () => {
                   </AnimationWrapper>
                 })
                 :
-                <NoDataMessage message="There is no notifications now." />
+                <NoDataMessage message={`${t("There is no notifications now")}.`} />
             }
 
             <LoadMoreDataBtn className="my-4" state={notifications} fetchDataFunc={fetchNotifications} additionalParam={{ deletedDocCount: notifications.deletedDocCount }} />

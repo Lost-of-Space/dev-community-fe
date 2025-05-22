@@ -5,8 +5,11 @@ import axios from "axios";
 import { NavLink } from "react-router-dom";
 import DialogWrapper from "../../components/dialog-window.component";
 import { credentialHeaders } from '~/services/credentials'
+import { useTranslation } from "react-i18next";
 
 const ManageUserCard = ({ user, setUsers }) => {
+  const { t } = useTranslation();
+
   const { userAuth, userAuth: { access_token, isAdmin } } = useContext(UserContext);
 
   const {
@@ -19,7 +22,7 @@ const ManageUserCard = ({ user, setUsers }) => {
   } = user;
 
   const toggleUserFlag = async (targetUserId, fieldToToggle) => {
-    let loadingToast = toast.loading(`Toggling ${fieldToToggle}...`);
+    let loadingToast = toast.loading(`${t("Toggling")} ${fieldToToggle}...`);
 
     try {
       const response = await axios.patch(
@@ -50,9 +53,9 @@ const ManageUserCard = ({ user, setUsers }) => {
       toast.success(response.data.message);
 
     } catch (error) {
-      console.error(`Failed to toggle ${fieldToToggle}:`, error);
+      console.error(`${t("Failed to toggle")} ${fieldToToggle}:`, error);
       toast.dismiss(loadingToast);
-      toast.error(error.response?.data?.error || `Failed to update ${fieldToToggle}`);
+      toast.error(error.response?.data?.error || `${t("Failed to update")} ${fieldToToggle}`);
     }
   };
 
@@ -72,7 +75,7 @@ const ManageUserCard = ({ user, setUsers }) => {
           </div>
         </div>
       </td>
-      <hr className="hidden max-sm:block text-grey pt-2" />
+      <div className="hidden max-sm:block h-px bg-grey mb-2"></div>
 
       <td className="p-4 max-sm:py-1">
         <p>{email}</p>
@@ -103,12 +106,11 @@ const ManageUserCard = ({ user, setUsers }) => {
       </td>
 
       <td className="p-4">
-        <hr className="hidden max-sm:block text-grey pb-4" />
+        <div className="hidden max-sm:block h-px bg-grey mb-4"></div>
         <div className="flex gap-2">
           <DialogWrapper
             onConfirm={() => toggleUserFlag(_id, "admin")}
-            message={<p>Are you sure you want to <span className="underline">{admin ? "remove" : "add"}</span> <span className="text-yellow bg-yellow/20 px-2">admin</span> status of user <span className="text-royalblue">{username}</span>?</p>}
-            confirmText={"Confirm"}
+            message={<p>{t("Are you sure you want to")} <span className="underline">{admin ? t("remove") : t("add")}</span> <span className="text-yellow bg-yellow/20 px-2">{t("Admin")}</span> {t("status of user")} <span className="text-royalblue">{username}</span>?</p>}
           >
             <button
               className="flex items-center justify-center hover:bg-yellow/20 hover:text-yellow active:bg-yellow/20 active:text-yellow px-2 py-1 h-8 w-8 rounded font-bold disabled:bg-grey/70 disabled:text-black/50"
@@ -119,14 +121,14 @@ const ManageUserCard = ({ user, setUsers }) => {
           </DialogWrapper>
           <DialogWrapper
             onConfirm={() => toggleUserFlag(_id, "blocked")}
-            message={<p>Are you sure you want to <span className={"px-2 " + (blocked ? "text-green bg-green/30" : "text-red bg-red/30")}>{blocked ? "unblock" : "block"}</span> user <span className="text-royalblue">{username}</span>?</p>}
-            confirmText={!blocked ? "Block" : "Unblock"}
+            message={<p>{t("Are you sure you want to")} <span className={"px-2 " + (blocked ? "text-green bg-green/30" : "text-red bg-red/30")}>{blocked ? t("mng_unblock") : t("mng_block")}</span> {t("user")} <span className="text-royalblue">{username}</span>?</p>}
+            confirmText={!blocked ? t("Block") : t("Unblock")}
           >
             <button
               disabled={email === userAuth.email}
               className="hover:bg-red/30 hover:text-red px-2 py-1 rounded disabled:bg-grey disabled:opacity-60 disabled:text-black"
             >
-              {!blocked ? "Block" : "Unblock"}
+              {!blocked ? t("Block") : t("Unblock")}
             </button>
           </DialogWrapper>
         </div>

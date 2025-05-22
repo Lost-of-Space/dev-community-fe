@@ -5,8 +5,10 @@ import { UserContext } from "../App";
 import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
 import { credentialHeaders } from '~/services/credentials'
+import { useTranslation } from "react-i18next";
 
 const PostInteraction = () => {
+  const { t } = useTranslation();
 
   let { post, post: { _id, title, banner, post_id, activity, activity: { total_likes, total_comments }, author: { personal_info: { username: author_username } } }, setPost, isLikedByUser, setIsLikedByUser, setCommentsWrapper } = useContext(PostContext)
 
@@ -51,7 +53,7 @@ const PostInteraction = () => {
         })
 
     } else {
-      toast.error("Log in to like the post")
+      toast.error(t("Log in to like the post"))
     }
   }
 
@@ -83,7 +85,7 @@ const PostInteraction = () => {
         <div className="flex gap-6 items-center">
           {
             username == author_username ?
-              <Link to={`/editor/${post_id}`} className="w-auto h-10 px-3 btn-mini">Edit</Link>
+              <Link to={`/editor/${post_id}`} className="w-auto h-10 px-3 btn-mini">{t("Edit")}</Link>
               :
               ""
           }

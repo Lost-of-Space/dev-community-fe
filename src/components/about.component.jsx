@@ -1,10 +1,14 @@
 import { Link } from "react-router-dom";
-import { getFullDay } from "../common/date";
+import { useTranslation } from "react-i18next";
+import { useLocalizedDateUtils } from "../common/date";
 
 const AboutUser = ({ className, bio, social_links, joinedAt }) => {
+  const { getDay, getFullDay } = useLocalizedDateUtils();
+  const { t } = useTranslation();
+
   return (
     <div className={"md:w-[90%] md:mt-7 " + className}>
-      <p className="text-xl leading-7">{bio.length ? bio : "No bio written"}</p>
+      <p className="text-xl leading-7">{bio.length ? bio : t("No bio written")}</p>
 
       <div className="flex gap-x-7 gap-y-2 flex-wrap my-7 items-center text-dark-grey/40">
         {
@@ -21,7 +25,7 @@ const AboutUser = ({ className, bio, social_links, joinedAt }) => {
         }
       </div>
 
-      <p className="text-xl leading-7 text-dark-grey">Joined on {getFullDay(joinedAt)}</p>
+      <p className="text-xl leading-7 text-dark-grey">{t("Joined on")} {getFullDay(joinedAt)}</p>
     </div>
   )
 }

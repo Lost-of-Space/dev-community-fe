@@ -4,8 +4,11 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { UserContext } from "../App";
 import Loader from "../components/loader.component";
 import { credentialHeaders } from '~/services/credentials'
+import { useTranslation } from "react-i18next";
 
 const UserStatisticsPage = () => {
+  const { t } = useTranslation();
+
   const [days, setDays] = useState(7);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -26,7 +29,7 @@ const UserStatisticsPage = () => {
         <p>{label}</p>
         {payload.map((entry, idx) => {
           let textColor = "text-red";
-          if (entry.name === "Comments") {
+          if (entry.dataKey === "comments") {
             textColor = "text-royalblue";
           }
 
@@ -80,7 +83,7 @@ const UserStatisticsPage = () => {
 
       })
       .catch(err => {
-        console.error("Error fetching user stats:", err);
+        console.error(`${t("An error occured")}: `, err);
       })
       .finally(() => {
         setLoading(false);
@@ -94,11 +97,11 @@ const UserStatisticsPage = () => {
 
   return (
     <>
-      <h1 className="max-md:hidden text-xl">Your Activity</h1>
+      <h1 className="max-md:hidden text-xl">{t("Your Activity")}</h1>
       <div className="p-4">
 
         <label className="mb-4 flex items-center">
-          Period (days):
+          {t("Period")} ({t("days")}):
           <select className="text-black bg-white outline-none" value={days} onChange={(e) => setDays(Number(e.target.value))}>
             <option value="7">7</option>
             <option value="14">14</option>
@@ -113,7 +116,7 @@ const UserStatisticsPage = () => {
                 onClick={() => setDays(option)}
                 className={`btn-filter px-2 py-1 ${days === option ? 'bg-black text-white' : 'bg-grey text-black'}`}
               >
-                {option === 14 ? "2 Weeks" : option === 30 ? "1 Month" : option === 180 ? "Half a Year" : option === 365 ? "1 Year" : `${option} Days`}
+                {option === 14 ? t("2 Weeks") : option === 30 ? t("1 Month") : option === 180 ? t("Half a Year") : option === 365 ? t("1 Year") : `${option} ${t("Days")}`}
               </button>
             ))}
           </div>
@@ -127,8 +130,8 @@ const UserStatisticsPage = () => {
               <XAxis dataKey="date" />
               <YAxis allowDecimals={false} />
               <Tooltip content={<CustomTooltip />} />
-              <Line type="monotone" dataKey="posts" name="Posts" stroke="red" />
-              <Line type="monotone" dataKey="comments" name="Comments" stroke="royalblue" />
+              <Line type="monotone" dataKey="posts" name={t("Posts")} stroke="red" />
+              <Line type="monotone" dataKey="comments" name={t("Comments")} stroke="royalblue" />
             </LineChart>
           </ResponsiveContainer>
         )}

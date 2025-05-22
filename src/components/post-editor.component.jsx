@@ -13,8 +13,10 @@ import { ThemeContext, UserContext } from "../App";
 import useCloudinaryUpload from "../common/cloudinary";
 import Loader from "./loader.component";
 import { credentialHeaders } from '~/services/credentials'
+import { useTranslation } from "react-i18next";
 
 const PostEditor = () => {
+  const { t } = useTranslation();
 
   const editorContext = useContext(EditorContext);
   if (!editorContext || !editorContext.post) {
@@ -45,7 +47,7 @@ const PostEditor = () => {
         holder: "textEditor",
         data: Array.isArray(content) ? content[0] : content,
         tools: tools,
-        placeholder: "Type here anything..."
+        placeholder: `${t("Type here anything")}...`
       }))
     }
   }, [])
@@ -57,7 +59,7 @@ const PostEditor = () => {
     const img = e.target.files[0];
     if (img) {
       try {
-        let loadingToast = toast.loading("Uploading...");
+        let loadingToast = toast.loading(`${t("Uploading")}...`);
         const url = await uploadToCloudinary(img);
 
         if (url) {
@@ -65,11 +67,11 @@ const PostEditor = () => {
           setBannerImg(url);
           setPost({ ...post, banner: url });
           toast.dismiss(loadingToast);
-          toast.success("Successfully Uploaded!");
+          toast.success(`${t("Uploaded")}!`);
         }
         toast.dismiss(loadingToast);
       } catch (error) {
-        toast.error(`Error: ${error.message}`);
+        toast.error(`${t("An error occured")}: ${error.message}`);
       }
     }
   };
@@ -99,11 +101,11 @@ const PostEditor = () => {
 
   const handlePublishEvent = () => {
     if (!banner.length) {
-      return toast.error("Upload a post banner to publish it.")
+      return toast.error(`${t("Upload a post banner to publish it")}.`)
     }
 
     if (!title.length) {
-      return toast.error("Set a post title to publish it.")
+      return toast.error(`${t("Set a post title to publish it")}.`)
     }
 
     if (textEditor.isReady) {
@@ -112,11 +114,11 @@ const PostEditor = () => {
           setPost({ ...post, content: data });
           setEditorState("publish")
         } else {
-          return toast.error("Write something in post to publish it.")
+          return toast.error(`${t("Write something in post to publish it")}.`)
         }
       })
         .catch((err) => {
-          return toast.error("An error occured..." + err)
+          return toast.error(`${t("An error occured")}: ` + err)
         })
     }
   }
@@ -127,10 +129,10 @@ const PostEditor = () => {
     }
 
     if (!title.length) {
-      return toast.error("Draft must have a title.")
+      return toast.error(`${t("Draft must have a title")}.`)
     }
 
-    let publishingToast = toast.loading("Publishing...")
+    let publishingToast = toast.loading(`${t("Publishing")}...`)
 
     e.target.classList.add('disable');
 
@@ -150,7 +152,7 @@ const PostEditor = () => {
             e.target.classList.remove('disable');
 
             toast.dismiss(publishingToast);
-            toast.success("Saved");
+            toast.success(t("Saved"));
 
             setTimeout(() => {
               navigate("/dashboard/posts?tab=draft")
@@ -161,7 +163,7 @@ const PostEditor = () => {
             e.target.classList.remove('disable');
 
             toast.dismiss(publishingToast);
-            return toast.error("An error occured " + response.data.error);
+            return toast.error(`${t("An error occured")}: ` + response.data.error);
           })
       })
     }
@@ -174,16 +176,16 @@ const PostEditor = () => {
           <img src={theme == "light" ? logo : logo_white} alt="logo" />
         </Link>
         <p className="max-md:hidden text-black line-clamp-1 w-full">
-          {title.length ? title : "New Post"}
+          {title.length ? title : t("New Post")}
         </p>
 
         <div className="flex gap-4 max-sm:gap-2 ml-auto">
           <button className="btn-dark py-2 max-sm:px-3"
             onClick={handlePublishEvent}>
-            Publish
+            {t("Publish")}
           </button>
           <button className="btn-light py-2 max-sm:px-3" onClick={handleSaveDraft}>
-            Save Draft
+            {t("Save Draft")}
           </button>
         </div>
 
@@ -209,7 +211,7 @@ const PostEditor = () => {
 
             <textarea
               defaultValue={title}
-              placeholder="Post Title"
+              placeholder={`${t("Post Title")}`}
               className="text-4xl w-full h-20 outline-none resize-none mt-10 leading-tight placeholder:opacity-40 bg-white"
               onKeyDown={handleTitleKeyDown}
               onChange={handleTitleChange}
