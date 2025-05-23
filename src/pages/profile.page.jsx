@@ -169,7 +169,7 @@ const ProfilePage = () => {
                 <AboutUser className="max-md:hidden" bio={bio} social_links={social_links} joinedAt={joinedAt} />
               </div>
               <div className="max-md:mt-12 w-full">
-                <InPageNavigation routes={[t("Posts Published"), "Following", t("About")]} defaultHidden={[t("About")]}>
+                <InPageNavigation routes={[t("Posts Published"), t("Following"), t("About")]} defaultHidden={[t("About")]}>
                   <>
                     {
                       posts == null ? (
