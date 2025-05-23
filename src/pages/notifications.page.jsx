@@ -23,6 +23,7 @@ const NotificationsPage = () => {
     { value: "like", label: t("Likes") },
     { value: "comment", label: t("Comments") },
     { value: "reply", label: t("Replies") },
+    { value: "post", label: t("Posts") },
   ];
 
 

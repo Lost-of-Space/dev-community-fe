@@ -39,6 +39,22 @@ const InPageNavigation = ({ routes, defaultHidden = [], defaultIndex = 0, childr
     }
   }, [width])
 
+  useEffect(() => {
+    if (activeTabRef.current) {
+      changePageState(activeTabRef.current, defaultIndex);
+    }
+
+    if (!isResizeEventAdded) {
+      window.addEventListener('resize', () => {
+        if (!isResizeEventAdded) {
+          setIsResizeEventAdded(true);
+        }
+        setWidth(window.innerWidth);
+      })
+    }
+  }, []);
+
+
   return (
     <>
       <div className="relative mb-8 bg-white border-b border-grey flex flex-nowrap overflow-x-auto">

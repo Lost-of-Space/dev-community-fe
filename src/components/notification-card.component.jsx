@@ -62,7 +62,8 @@ const NotificationCard = ({ data, index, notificationState }) => {
               {
                 type == 'like' ? ` ${t("liked your post")}` :
                   type == 'comment' ? ` ${t("commented on")}` :
-                    ` ${t("replied on")}`
+                    type == 'post' ? ` ${t("published a post")}` :
+                      ` ${t("replied on")}`
               }
             </span>
           </h1>
@@ -78,7 +79,7 @@ const NotificationCard = ({ data, index, notificationState }) => {
         </div>
       </div>
       {
-        type != 'like' ?
+        type != 'like' && type != 'post' ?
           <p className="ml-14 pl-5 text-xl my-5">{comment.comment}</p>
           : ""
       }
@@ -86,7 +87,7 @@ const NotificationCard = ({ data, index, notificationState }) => {
       <div className="ml-14 pl-5 mt-3 text-dark-grey flex gap-8">
         <p>{getDay(createdAt)}</p>
         {
-          type != "like" ?
+          type != "like" && type != "post" ?
             <>
               {
                 !reply ?

@@ -74,37 +74,32 @@ const uploadImageByFile = (file) => {
 
 
 // Tools config
-export const tools = () => {
-  const { t } = useTranslation();
-
-  return {
-    embed: Embed,
-    list: {
-      class: List,
-      inlineToolbar: true,
-    },
-    image: {
-      class: Image,
-      config: {
-        uploader: {
-          uploadByUrl: uploadImageByURL,
-          uploadByFile: uploadImageByFile,
-        },
+export const tools = {
+  embed: Embed,
+  list: {
+    class: List,
+    inlineToolbar: true,
+  },
+  image: {
+    class: Image,
+    config: {
+      uploader: {
+        uploadByUrl: uploadImageByURL,
+        uploadByFile: uploadImageByFile,
       },
     },
-    header: {
-      class: Header,
-      config: {
-        placeholder: `${t("Type Heading")}...`,
-        levels: [1, 2, 3],
-        defaultLevel: 2,
-      },
+  },
+  header: {
+    class: Header,
+    config: {
+      levels: [1, 2, 3],
+      defaultLevel: 2,
     },
-    quote: {
-      class: Quote,
-      inlineToolbar: true,
-    },
-    marker: Marker,
-    inlineCode: InlineCode
-  }
+  },
+  quote: {
+    class: Quote,
+    inlineToolbar: true,
+  },
+  marker: Marker,
+  inlineCode: InlineCode
 };

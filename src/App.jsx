@@ -23,7 +23,6 @@ import PostStatisticsPage from "./control-panel/pages/post-statistics.page";
 import PostsManagementPage from "./control-panel/pages/manage-posts.adm.page";
 import DashboardPage from "./pages/dashboard.page";
 import './i18n';
-import { useTranslation } from "react-i18next";
 
 export const UserContext = createContext({});
 

@@ -14,6 +14,8 @@ import LoadMoreDataBtn from "../components/load-more.component";
 import PageNotFound from "./404.page";
 import { useTranslation } from "react-i18next";
 import { credentialHeaders } from '~/services/credentials'
+import FollowButton from "../components/follow-button.component";
+import FollowedUserCard from "../components/followed-user-card.component";
 
 export const profileDataStructure = {
   personal_info: {
@@ -45,41 +47,47 @@ const ProfilePage = () => {
 
   let [profileLoaded, setProfileLoaded] = useState("");
 
+  const [following, setFollowing] = useState([]);
+  const [followingUsers, setFollowingUsers] = useState(null);
+
   let {
-    personal_info: { fullname, username: profile_username, profile_img, bio },
+    personal_info: { bio },
     account_info: { total_posts, total_reads },
     social_links,
     joinedAt,
     blocked
   } = profile;
 
-  let { userAuth: { username, isBlocked } } = useContext(UserContext)
+  let { userAuth: { username } } = useContext(UserContext)
 
   const fetchUserProfile = async () => {
-    await axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-profile`, { username: profileId }, {
-      headers: {
-        ...credentialHeaders
-      }
-    })
-      .then(({ data: user }) => {
-        if (user != null) {
-          setProfile(user);
-        }
+    try {
+      const { data: user } = await axios.post(
+        `${import.meta.env.VITE_SERVER_DOMAIN}/get-profile`,
+        { username: profileId },
+        { headers: { ...credentialHeaders } }
+      );
+
+      if (user) {
+        setProfile(user);
+        setFollowing(user.following || []);
         setProfileLoaded(profileId);
         getPosts({ user_id: user._id });
-        setLoading(false);
-      })
-      .catch(err => {
-        setLoading(false);
-        return toast.error(`${t("An error occured")}: ` + err.message);
-      })
-  }
+      }
+    } catch (err) {
+      toast.error(`${t("An error occured")}: ` + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getPosts = ({ page = 1, user_id }) => {
 
     user_id = user_id == undefined ? posts.user_id : user_id;
 
-    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/search-posts`, { author: user_id, page })
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/search-posts`, { author: user_id, page }, {
+      headers: { ...credentialHeaders }
+    })
       .then(async ({ data }) => {
 
         let formatedData = await filterPaginationData({
@@ -107,6 +115,21 @@ const ProfilePage = () => {
     }
 
   }, [profileId, posts])
+
+  useEffect(() => {
+    if (following.length > 0) {
+      axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-users-by-id`, { user_ids: following }, {
+        headers: { ...credentialHeaders }
+      })
+        .then(({ data }) => {
+          setFollowingUsers(data.users);
+        })
+        .catch(err => console.log(err));
+    } else {
+      setFollowingUsers([]);
+    }
+  }, [following]);
+
 
   const resetStates = () => {
     setProfile(profileDataStructure);
@@ -138,14 +161,15 @@ const ProfilePage = () => {
                   {
                     profileId == username ?
                       <Link to="/settings/edit-profile" className="bg-grey text-xl py-3 px-7 hover:bg-black active:bg-black hover:text-white active:text-white selector-white">{t("Edit")}</Link>
-                      : ""
+                      :
+                      <FollowButton username={profileId} />
                   }
                 </div>
 
                 <AboutUser className="max-md:hidden" bio={bio} social_links={social_links} joinedAt={joinedAt} />
               </div>
               <div className="max-md:mt-12 w-full">
-                <InPageNavigation routes={[t("Posts Published"), t("About")]} defaultHidden={[t("About")]}>
+                <InPageNavigation routes={[t("Posts Published"), "Following", t("About")]} defaultHidden={[t("About")]}>
                   <>
                     {
                       posts == null ? (
@@ -166,6 +190,22 @@ const ProfilePage = () => {
                     }
                     <LoadMoreDataBtn state={posts} fetchDataFunc={getPosts} />
                   </>
+
+                  <div>
+                    {
+                      followingUsers === null
+                        ? <Loader />
+                        : followingUsers.length
+                          ? followingUsers.map((user, i) => (
+                            <AnimationWrapper key={i} transition={{ duration: 1, delay: i * 0.08 }}>
+                              <FollowedUserCard user={user} targetUsername={user.personal_info.username} />
+                            </AnimationWrapper>
+                          ))
+                          : <NoDataMessage message={`${t("Not following anyone yet")}.`} />
+                    }
+                  </div>
+
+
                   <AboutUser bio={bio} social_links={social_links} joinedAt={joinedAt} />
                 </InPageNavigation>
               </div>
