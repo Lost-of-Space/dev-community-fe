@@ -29,7 +29,6 @@ const ManageUserCard = ({ user, setUsers }) => {
         `${import.meta.env.VITE_SERVER_DOMAIN}/toggle-user-flag`,
         {
           targetUserId,
-          isAdmin,
           field: fieldToToggle,
         },
         {
