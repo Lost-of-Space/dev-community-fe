@@ -19,6 +19,14 @@ const UserStatisticsPage = () => {
     total_reads: 0
   });
 
+  const statItems = [
+    { id: "total_posts", label: t("total_posts"), value: stats.total_posts },
+    { id: "total_comments", label: t("total_comments"), value: stats.total_comments },
+    { id: "total_likes", label: t("total_likes"), value: stats.total_likes },
+    { id: "total_reads", label: t("total_reads"), value: stats.total_reads }
+  ];
+
+
   const { userAuth: { access_token } } = useContext(UserContext);
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -138,22 +146,18 @@ const UserStatisticsPage = () => {
 
         {/* Stats Summary */}
         <div className="flex gap-2 max-lg:pb-6 border-grey mt-4 max-lg:border-b">
-          {
-            Object.keys(stats).map((key, i) => (
-              <div
-                key={i}
-                className={
-                  "flex flex-col items-center w-full h-full justify-center p-4 max-sm:px-2 px-6 " +
-                  (i !== 0 ? "border-grey border-l" : "")
-                }
-              >
-                <h1 className="text-xl lg:text-2xl mb-2">{stats[key].toLocaleString()}</h1>
-                <p className="max-lg:text-dark-grey capitalize">
-                  {key.split("_").join(" ")}
-                </p>
-              </div>
-            ))
-          }
+          {statItems.map(({ id, label, value }, i) => (
+            <div
+              key={id}
+              className={
+                "flex flex-col items-center w-full h-full justify-center p-4 max-sm:px-2 px-6 " +
+                (i !== 0 ? "border-grey border-l" : "")
+              }
+            >
+              <h1 className="text-xl lg:text-2xl mb-2">{value.toLocaleString()}</h1>
+              <p className="max-lg:text-dark-grey capitalize text-center">{label}</p>
+            </div>
+          ))}
         </div>
       </div>
     </>

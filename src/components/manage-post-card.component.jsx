@@ -8,20 +8,30 @@ import { useTranslation } from "react-i18next";
 import { useLocalizedDateUtils } from "../common/date";
 
 const PostStats = ({ stats }) => {
+  const { t } = useTranslation();
+
+  // Перетворення stats-об'єкта в масив
+  const statItems = Object.entries(stats)
+    .filter(([key]) => !key.includes("parent"))
+    .map(([key, value]) => ({ id: key, value }));
+
   return (
     <div className="flex gap-2 max-lg:mb-6 max-lg:pb-6 border-grey max-lg:border-b">
-      {
-        Object.keys(stats).map((key, i) => {
-          return !key.includes("parent") ? <div key={i} className={"flex flex-col items-center w-full h-full justify-center p-4 px-6 " + (i != 0 ? "border-grey border-l" : "")}>
-            <h1 className="text-xl lg:text-2xl mb-2">{stats[key].toLocaleString()}</h1>
-            <p className="max-lg:text-dark-grey capitalize">{key.split("_")[1]}</p>
-          </div>
-            : ""
-        })
-      }
+      {statItems.map(({ id, value }, i) => (
+        <div
+          key={id}
+          className={
+            "flex flex-col items-center w-full h-full justify-center p-4 px-6 " +
+            (i !== 0 ? "border-grey border-l" : "")
+          }
+        >
+          <h1 className="text-xl lg:text-2xl mb-2">{value.toLocaleString()}</h1>
+          <p className="max-lg:text-dark-grey capitalize">{t(id)}</p>
+        </div>
+      ))}
     </div>
-  )
-}
+  );
+};
 
 export const ManagePublishedPostCard = ({ post }) => {
   const { getDay, getFullDay } = useLocalizedDateUtils();

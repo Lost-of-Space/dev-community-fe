@@ -16,7 +16,7 @@ const FollowButton = ({ username }) => {
       axios
         .get(`${import.meta.env.VITE_SERVER_DOMAIN}/follow-status/${username}`, {
           headers: {
-            "X-Authorization": `Bearer ${access_token}`,
+            'X-Authorization': `Bearer ${access_token}`,
             ...credentialHeaders
           },
         })
@@ -35,7 +35,7 @@ const FollowButton = ({ username }) => {
       { username, isFollowed },
       {
         headers: {
-          "X-Authorization": `Bearer ${access_token}`,
+          'X-Authorization': `Bearer ${access_token}`,
           ...credentialHeaders
         }
       }

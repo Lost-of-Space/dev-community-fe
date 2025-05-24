@@ -34,7 +34,7 @@ const ManageUserCard = ({ user, setUsers }) => {
         },
         {
           headers: {
-            "X-Authorization": `Bearer ${access_token}`,
+            'X-Authorization': `Bearer ${access_token}`,
             ...credentialHeaders
           }
         }

@@ -194,6 +194,7 @@
   "Posts Published": "Публікації",
   "Following": "Відстежується",
   "About": "Про себе",
+  "The user has not posted anything yet": "Користувач ще нічого не опублікував",
   "Not following anyone yet": "Ще ніхто не відстежується",
   "No such user found": "Користувача не знайдено",
   "search_search results for": "результати пошуку для",
@@ -209,5 +210,14 @@
   "Welcome back": "З поверненням",
   "Register now": "Зареєструватися зараз",
   "Password": "Пароль",
-  "auth_or": "або"
+  "auth_or": "або",
+  "total_posts": "Усього публікацій",
+  "posts_last_days": "Публікацій за останні {{days}} днів",
+  "total_draft": "Усього Чернеток",
+  "total_users": "Усього користувачів",
+  "users_last_days": "Користувачів за останні {{days}} днів",
+  "total_blocked": "Усього заблоковано",
+  "total_likes": "Вподобання",
+  "total_comments": "Коментарі",
+  "total_reads": "Перегляди"
 }

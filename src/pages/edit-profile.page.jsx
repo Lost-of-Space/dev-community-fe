@@ -114,7 +114,8 @@ const EditProfilePage = () => {
       }
     }, {
       headers: {
-        'X-Authorization': `Bearer ${access_token}`
+        'X-Authorization': `Bearer ${access_token}`,
+        ...credentialHeaders
       }
     })
       .then(({ data }) => {
@@ -138,7 +139,12 @@ const EditProfilePage = () => {
 
   useEffect(() => {
     if (access_token) {
-      axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-profile`, { username: userAuth.username })
+      axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-profile`, { username: userAuth.username },
+        {
+          headers: {
+            ...credentialHeaders
+          }
+        })
         .then(({ data }) => {
           setProfile(data);
           setLoading(false);

@@ -185,7 +185,7 @@ const ProfilePage = () => {
                               );
                             })}
                           </div>
-                          : <NoDataMessage message={`${t("No such posts found")}!`} />
+                          : <NoDataMessage message={`${t("The user has not posted anything yet")}`} />
                       )
                     }
                     <LoadMoreDataBtn state={posts} fetchDataFunc={getPosts} />

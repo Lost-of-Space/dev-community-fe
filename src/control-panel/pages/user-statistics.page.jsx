@@ -26,11 +26,12 @@ const StatisticsPage = () => {
   const [days, setDays] = useState(14);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState({
-    total_users: 0,
-    users_last_days: 0,
-    total_blocked: 0
-  });
+  const [stats, setStats] = useState([
+    { id: "total_users", value: 0 },
+    { id: "users_last_days", value: 0 },
+    { id: "total_blocked", value: 0 }
+  ]);
+
 
   let { userAuth: { access_token, isAdmin } } = useContext(UserContext);
 
@@ -45,7 +46,7 @@ const StatisticsPage = () => {
         },
         {
           headers: {
-            "X-Authorization": `Bearer ${access_token}`,
+            'X-Authorization': `Bearer ${access_token}`,
             ...credentialHeaders
           }
         }
@@ -68,11 +69,12 @@ const StatisticsPage = () => {
       }
 
       setData(graphData);
-      setStats({
-        total_users: res.totalUsers,
-        users_last_days: res.recentUsers.length,
-        total_blocked: res.blockedUsers
-      });
+      setStats([
+        { id: "total_users", value: res.totalUsers },
+        { id: "users_last_days", value: res.recentUsers.length },
+        { id: "total_blocked", value: res.blockedUsers }
+      ]);
+
 
     } catch (err) {
       console.error(`${t("An error occured")}:`, err);
@@ -125,24 +127,20 @@ const StatisticsPage = () => {
       )}
 
       <div className="flex gap-2 max-lg:pb-6 mt-4 border-grey max-lg:border-b">
-        {
-          Object.keys(stats).map((key, i) => (
-            !key.includes("parent") && (
-              <div
-                key={i}
-                className={
-                  "flex flex-col items-center w-full h-full justify-center p-4 px-6 " +
-                  (i !== 0 ? "border-grey border-l" : "")
-                }
-              >
-                <h1 className="text-xl lg:text-2xl mb-2">{stats[key].toLocaleString()}</h1>
-                <p className="max-lg:text-dark-grey capitalize">
-                  {key === "users_last_days" ? `${t("Users last")} ${days} ${t("Days")}` : key.split("_").join(" ")}
-                </p>
-              </div>
-            )
-          ))
-        }
+        {stats.map(({ id, value }, i) => (
+          <div
+            key={id}
+            className={
+              "flex flex-col items-center w-full h-full justify-center p-4 px-6 " +
+              (i !== 0 ? "border-grey border-l" : "")
+            }
+          >
+            <h1 className="text-xl lg:text-2xl mb-2">{value.toLocaleString()}</h1>
+            <p className="max-lg:text-dark-grey capitalize text-center">
+              {id === "users_last_days" ? t(id, { days }) : t(id)}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );

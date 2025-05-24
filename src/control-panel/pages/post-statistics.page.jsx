@@ -15,11 +15,12 @@ const PostStatisticsPage = () => {
   const [days, setDays] = useState(14);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState({
-    total_posts: 0,
-    posts_last_days: 0,
-    total_draft: 0
-  });
+  const [stats, setStats] = useState([
+    { id: "total_posts", value: 0 },
+    { id: "posts_last_days", value: 0 },
+    { id: "total_draft", value: 0 }
+  ]);
+
 
   const { userAuth: { access_token, isAdmin } } = useContext(UserContext);
 
@@ -41,7 +42,7 @@ const PostStatisticsPage = () => {
         { days, isAdmin },
         {
           headers: {
-            "X-Authorization": `Bearer ${access_token}`,
+            'X-Authorization': `Bearer ${access_token}`,
             ...credentialHeaders
           }
         }
@@ -64,11 +65,12 @@ const PostStatisticsPage = () => {
       }
 
       setData(graphData);
-      setStats({
-        total_posts: res.totalPosts,
-        posts_last_days: res.recentPosts.length,
-        total_draft: res.totalDrafts
-      });
+      setStats([
+        { id: "total_posts", value: res.totalPosts },
+        { id: "posts_last_days", value: res.recentPosts.length },
+        { id: "total_draft", value: res.totalDrafts }
+      ]);
+
 
     } catch (err) {
       console.error(`${t("An error occured")}: `, err);
@@ -122,22 +124,20 @@ const PostStatisticsPage = () => {
       )}
 
       <div className="flex gap-2 max-lg:pb-6 border-grey mt-4 max-lg:border-b">
-        {
-          Object.keys(stats).map((key, i) => (
-            <div
-              key={i}
-              className={
-                "flex flex-col items-center w-full h-full justify-center p-4 px-6 " +
-                (i !== 0 ? "border-grey border-l" : "")
-              }
-            >
-              <h1 className="text-xl lg:text-2xl mb-2">{stats[key].toLocaleString()}</h1>
-              <p className="max-lg:text-dark-grey capitalize">
-                {key === "posts_last_days" ? `${t("Posts last")} ${days} ${t("Days")}` : key.split("_").join(" ")}
-              </p>
-            </div>
-          ))
-        }
+        {stats.map(({ id, value }, i) => (
+          <div
+            key={id}
+            className={
+              "flex flex-col items-center w-full h-full justify-center p-4 px-6 " +
+              (i !== 0 ? "border-grey border-l" : "")
+            }
+          >
+            <h1 className="text-xl lg:text-2xl mb-2">{value.toLocaleString()}</h1>
+            <p className="max-lg:text-dark-grey capitalize text-center">
+              {id === "posts_last_days" ? t(id, { days }) : t(id)}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );

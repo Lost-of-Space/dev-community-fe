@@ -194,6 +194,7 @@
   "Posts Published": "Posts Published",
   "Following": "Following",
   "About": "About",
+  "The user has not posted anything yet": "The user has not posted anything yet",
   "Not following anyone yet": "Not following anyone yet",
   "No such user found": "No such user found",
   "search_search results for": "search results for",
@@ -209,5 +210,14 @@
   "Welcome back": "Welcome back",
   "Register now": "Register now",
   "Password": "Password",
-  "auth_or": "or"
+  "auth_or": "or",
+  "total_posts": "Total Posts",
+  "posts_last_days": "Posts for last {{days}} days",
+  "total_draft": "Total Drafts",
+  "total_users": "Total Users",
+  "users_last_days": "Users for last {{days}} days",
+  "total_blocked": "Total Blocked",
+  "total_likes": "Likes",
+  "total_comments": "Comments",
+  "total_reads": "Reads"
 }
