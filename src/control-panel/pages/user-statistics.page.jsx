@@ -88,9 +88,9 @@ const StatisticsPage = () => {
   }, [days]);
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl mb-4 text-dark-grey">{t("Users Registered")}</h1>
-      <label className="mb-4 flex items-center">
+    <div>
+      <h1 className="text-xl mb-4">{t("Users Registered")}</h1>
+      <label className="mb-4 flex items-center max-md:mt-5 md:mt-8">
         {t("Period")} ({t("days")}):
         <select className="text-black bg-white outline-none" value={days} onChange={(e) => setDays(Number(e.target.value))}>
           <option value="7">7</option>
