@@ -95,9 +95,9 @@ const StatisticsPage = () => {
         <select className="text-black bg-white outline-none" value={days} onChange={(e) => setDays(Number(e.target.value))}>
           <option value="7">7</option>
           <option value="14">14</option>
-          <option value="30">30</option>
-          <option value="180">180</option>
-          <option value="365">365</option>
+          <option value="30" className="max-sm:hidden">30</option>
+          <option value="180" className="max-sm:hidden">180</option>
+          <option value="365" className="max-sm:hidden">365</option>
         </select>
         <div className="flex flex-wrap ml-4 gap-2 max-sm:hidden">
           {[7, 14, 30, 180, 365].map(option => (
@@ -115,7 +115,7 @@ const StatisticsPage = () => {
       {loading ? (
         <Loader />
       ) : (
-        <ResponsiveContainer width="100%" className="text-black" height={400}>
+        <ResponsiveContainer width="100%" className="text-black max-sm:-ml-10" height={400}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" />
@@ -131,12 +131,12 @@ const StatisticsPage = () => {
           <div
             key={id}
             className={
-              "flex flex-col items-center w-full h-full justify-center p-4 px-6 " +
+              "flex flex-col items-center w-full h-full justify-center p-4 px-6 max-sm:px-2 " +
               (i !== 0 ? "border-grey border-l" : "")
             }
           >
             <h1 className="text-xl lg:text-2xl mb-2">{value.toLocaleString()}</h1>
-            <p className="max-lg:text-dark-grey capitalize text-center">
+            <p className="max-lg:text-dark-grey max-sm:text-sm capitalize text-center">
               {id === "users_last_days" ? t(id, { days }) : t(id)}
             </p>
           </div>

@@ -112,7 +112,7 @@ const PostStatisticsPage = () => {
       {loading ? (
         <Loader />
       ) : (
-        <ResponsiveContainer width="100%" className="text-black" height={400}>
+        <ResponsiveContainer width="100%" className="text-black max-sm:-ml-10" height={400}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" />
@@ -133,7 +133,7 @@ const PostStatisticsPage = () => {
             }
           >
             <h1 className="text-xl lg:text-2xl mb-2">{value.toLocaleString()}</h1>
-            <p className="max-lg:text-dark-grey capitalize text-center">
+            <p className="max-lg:text-dark-grey max-sm:text-sm capitalize text-center">
               {id === "posts_last_days" ? t(id, { days }) : t(id)}
             </p>
           </div>
