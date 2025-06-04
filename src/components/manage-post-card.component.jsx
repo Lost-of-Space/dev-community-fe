@@ -21,7 +21,7 @@ const PostStats = ({ stats }) => {
         <div
           key={id}
           className={
-            "flex flex-col items-center w-full h-full justify-center p-4 px-6 " +
+            "flex flex-col items-center w-full h-full justify-center p-4 px-6 max-sm:px-4 " +
             (i !== 0 ? "border-grey border-l" : "")
           }
         >
@@ -45,26 +45,27 @@ export const ManagePublishedPostCard = ({ post }) => {
 
   return (
     <>
-      <div className="flex gap-10 border-b mb-6 max-md:px-4 border-grey pb-6 items-center">
-        <img src={banner} className="max:md:hidden lg:hidden xl:block w-28 h-28 flex-none bg-grey object-cover" alt="post banner" />
+      <div className="flex gap-4 lg:gap-10 border-b mb-6 max-md:px-4 border-grey pb-6 items-center">
+        <img src={banner} className="max:md:hidden lg:hidden xl:block w-28 h-28 max-sm:w-24 max-sm:h-24 flex-none bg-grey object-cover" alt="post banner" />
 
-        <div className="flex flex-col justify-between py-2 w-full min-w-[300px]">
+        <div className="flex flex-col justify-between py-2 w-full md:min-w-[300px]">
           <div>
             <Link to={`/post/${post_id}`} className="post-title mb-4 hover:underline">{title}</Link>
 
             <p className="line-clamp-1">{t("Published on")} {getDay(publishedAt)}</p>
           </div>
 
-          <div className="flex gap-6 mt-3">
-            <Link to={`/editor/${post_id}`} className="pt-4 py-2 underline">{t("Edit")}</Link>
+          <hr className="text-grey my-2 max-sm:block hidden" />
+          <div className="flex flex-wrap gap-6 max-sm:gap-x-4 gap-y-2 md:mt-3">
+            <Link to={`/editor/${post_id}`} className="max-sm:p-0 pt-4 py-2 underline">{t("Edit")}</Link>
 
-            <button onClick={() => setShowStats(preVal => !preVal)} className="lg:hidden pt-4 py-2 underline">{t("Stats")}</button>
+            <button onClick={() => setShowStats(preVal => !preVal)} className="max-sm:p-0 lg:hidden pt-4 py-2 underline">{t("Stats")}</button>
 
             <DialogWrapper
               onConfirm={(e) => deletePost(post, access_token)}
               message={<p>{t("Are you sure you want to")} <span className="text-red bg-red/30 px-2">{t("Delete")}</span> {t("this post?")} <span className="block">{`${t("This action cannot be undone")}.`}</span></p>}
             >
-              <button className="pt-4 py-2 underline text-red">{t("Delete")}</button>
+              <button className="max-sm:p-0 pt-4 py-2 underline text-red">{t("Delete")}</button>
             </DialogWrapper>
           </div>
 

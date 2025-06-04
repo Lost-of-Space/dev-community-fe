@@ -56,8 +56,8 @@ const ManagePostCard = ({ post, setPosts }) => {
       </td>
       <div className="hidden max-sm:block h-px bg-grey my-1"></div>
 
-      <td className="p-4 max-sm:py-1">
-        <NavLink to={`/user/${username}`} className="text-dark-grey hover:underline active:underline">
+      <td className="p-4 max-sm:py-1 md:max-w-[240px]">
+        <NavLink to={`/user/${username}`} className="block text-dark-grey hover:underline active:underline truncate overflow-hidden whitespace-nowrap">
           <span className="hidden max-sm:inline-block text-black">{t("By")}</span> @{username}
         </NavLink>
       </td>

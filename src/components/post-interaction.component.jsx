@@ -6,6 +6,8 @@ import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
 import { credentialHeaders } from '~/services/credentials'
 import { useTranslation } from "react-i18next";
+import { PopupMenu } from "./popup.component";
+import ReportDialog from "./report-dialog.component";
 
 const PostInteraction = () => {
   const { t } = useTranslation();
@@ -90,8 +92,25 @@ const PostInteraction = () => {
               ""
           }
           <Link to={`https://twitter.com/intent/tweet?text=Read Post: ${title}&url=${location.href}`} target="_blank">
-            <span className="fi fi-brands-twitter text-xl hover:text-twitter"></span>
+            <span className="fi fi-brands-twitter text-xl hover:text-twitter -mb-1 block"></span>
           </Link>
+
+          <PopupMenu
+            trigger={<span className="fi fi-bs-menu-dots-vertical w-10 h-10 rounded-full flex items-center justify-center hover:bg-grey active:bg-grey"></span>}
+          >
+            <ReportDialog postId={post_id}>
+              {({ open }) => (
+                <button
+                  onClick={open}
+                  className="block relative px-4 py-2 pl-8 text-sm hover:bg-grey w-full text-left"
+                >
+                  <span className="fi fi-rr-exclamation absolute top-[23%] left-2"></span>
+                  {t("post_Report this post")}
+                </button>
+              )}
+            </ReportDialog>
+          </PopupMenu>
+
         </div>
       </div>
       <hr className="border-grey my-2" />

@@ -66,18 +66,18 @@ const ManageUserCard = ({ user, setUsers }) => {
           <img
             src={profile_img}
             className="w-10 h-10 rounded-full object-cover"
-            alt={fullname}
+            alt={`${fullname}'s avatar`}
           />
           <div>
-            <p className="font-medium">{fullname}</p>
-            <NavLink to={`/user/${username}`} className="text-dark-grey text-sm hover:underline active:underline">@{username}</NavLink>
+            <p className="font-medium md:max-w-[150px] truncate overflow-hidden whitespace-nowrap">{fullname}</p>
+            <NavLink to={`/user/${username}`} className="block text-dark-grey text-sm md:max-w-[150px] truncate overflow-hidden whitespace-nowrap hover:underline active:underline">@{username}</NavLink>
           </div>
         </div>
       </td>
       <div className="hidden max-sm:block h-px bg-grey mb-2"></div>
 
       <td className="p-4 max-sm:py-1">
-        <p>{email}</p>
+        <p className="md:max-w-[220px] truncate overflow-hidden whitespace-nowrap">{email}</p>
       </td>
 
       <td className="p-4 max-sm:py-1">

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, NavLink, useParams } from "react-router-dom";
 import AnimationWrapper from "../common/page-animation";
 import Loader from "../components/loader.component";
 import PostInteraction from "../components/post-interaction.component";
@@ -11,6 +11,7 @@ import { fetchComments } from "../components/comments.component";
 import { credentialHeaders } from '~/services/credentials'
 import { useTranslation } from "react-i18next";
 import { useLocalizedDateUtils } from "../common/date";
+import usePostViewTracker from "../common/post-view-tracker";
 
 
 export const postStructure = {
@@ -29,6 +30,7 @@ const PostPage = () => {
   const { t } = useTranslation();
 
   let { post_id } = useParams()
+  const isFirstViewToday = usePostViewTracker(post_id);
 
   const [post, setPost] = useState(postStructure);
   const [loading, setLoading] = useState(true);
@@ -40,7 +42,7 @@ const PostPage = () => {
   let { title, tags, content, banner, author: { personal_info: { fullname, username: author_username, profile_img } }, publishedAt } = post;
 
   const fetchPost = () => {
-    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-post`, { post_id }, {
+    axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/get-post`, { post_id, count_view: isFirstViewToday }, {
       headers: {
         ...credentialHeaders
       }
@@ -72,7 +74,7 @@ const PostPage = () => {
     resetStates();
     fetchPost();
 
-  }, [post_id])
+  }, [post_id, isFirstViewToday])
 
   const resetStates = () => {
     setPost(postStructure);
@@ -96,7 +98,7 @@ const PostPage = () => {
               <div className="flex flex-wrap mt-5 -mb-6 gap-3">
                 {
                   tags.map((tag, i) => (
-                    <span key={i} className="tag text-black py-1 px-4 rounded-full text-xs">{tag}</span>
+                    <NavLink to={`/search/tag=${tag}`} key={i} className="tag text-black py-1 ml-2 px-4 rounded-full text-xs hover:bg-black hover:text-white">{tag}</NavLink>
                   ))
                 }
               </div>
@@ -141,7 +143,7 @@ const PostPage = () => {
                       similarPosts.map((post, i) => {
                         let { author: { personal_info } } = post;
 
-                        return <AnimationWrapper key={i} transition={{ duration: 1, delay: i * 0.08 }}>
+                        return <AnimationWrapper key={i} transition={{ duration: 1, delay: i * 0.08 }} className="isolate">
                           <PostCard content={post} author={personal_info} />
                         </AnimationWrapper>
                       })

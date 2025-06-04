@@ -13,14 +13,15 @@ import { useTranslation } from "react-i18next";
 import { credentialHeaders } from '~/services/credentials'
 
 const HomePage = () => {
-  const { t } = useTranslation();
-
   const [showScrollToTop, setShowScrollToTop] = useState(false);
 
   let [latestPosts, setLatestPosts] = useState(null);
   let [popularPosts, setPopularPosts] = useState(null);
 
-  let [pageState, setPageState] = useState(t("home_home"));
+  const { t, i18n } = useTranslation();
+
+  const [pageState, setPageState] = useState(t("home_home"));
+  const [homeLabel, setHomeLabel] = useState(t("home_home"));
 
   const [categories, setCategories] = useState([]);
 
@@ -127,6 +128,18 @@ const HomePage = () => {
     }
 
   }, [pageState])
+
+  useEffect(() => {
+    const handleLanguageChanged = () => {
+      const newHomeLabel = i18n.t("home_home");
+      setHomeLabel(newHomeLabel);
+
+      setPageState((prev) => (prev === homeLabel ? newHomeLabel : prev));
+    };
+
+    i18n.on("languageChanged", handleLanguageChanged);
+    return () => i18n.off("languageChanged", handleLanguageChanged);
+  }, [homeLabel, i18n]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -246,9 +259,9 @@ const HomePage = () => {
       </AnimationWrapper>
 
       <button
-        className={`fixed w-14 h-14 bottom-6 right-6 z-50 p-3 rounded-full transition-all duration-[250] ${showScrollToTop ? 'opacity-100 scale-100' : 'opacity-0 scale-0'} bg-black text-white shadow-md hover:shadow-lg hover:bg-royalblue hover:text-white-404`}
+        className={`select-none fixed w-14 h-14 bottom-6 right-6 z-50 p-3 rounded-full transition-all duration-[250] ${showScrollToTop ? 'opacity-100 scale-100' : 'opacity-0 scale-0'} bg-black text-white shadow-md hover:shadow-lg hover:bg-royalblue hover:text-white-404`}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-        <span className="fi fi-rr-angle-small-up text-3xl block -mt-1"></span>
+        <span className="fi fi-rr-angle-small-up text-3xl block -mt-1 select-none"></span>
       </button>
     </>
   )

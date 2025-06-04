@@ -72,7 +72,7 @@ const NotificationsPage = () => {
     <div>
       <h1 className="max-md:hidden text-xl">{t("Recent Notifications")}</h1>
 
-      <div className="my-8 flex gap-6 max-sm:gap-2">
+      <div className="my-8 flex gap-6 max-sm:gap-2 flex-wrap">
         {
           filters.map(({ value, label }, i) => (
             <button

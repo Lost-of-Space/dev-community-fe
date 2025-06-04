@@ -25,6 +25,10 @@
         @apply font-monospace font-normal text-black bg-white;
     }
 
+    .no-scroll {
+        overflow: hidden !important;
+    }
+
     i {
         @apply mt-0.5;
     }

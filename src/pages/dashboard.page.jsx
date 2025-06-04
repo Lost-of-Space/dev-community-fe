@@ -113,9 +113,9 @@ const UserStatisticsPage = () => {
           <select className="text-black bg-white outline-none" value={days} onChange={(e) => setDays(Number(e.target.value))}>
             <option value="7">7</option>
             <option value="14">14</option>
-            <option value="30">30</option>
-            <option value="180">180</option>
-            <option value="365">365</option>
+            <option className="max-sm:hidden" value="30">30</option>
+            <option className="max-sm:hidden" value="180">180</option>
+            <option className="max-sm:hidden" value="365">365</option>
           </select>
           <div className="flex flex-wrap ml-4 gap-2 max-sm:hidden">
             {[7, 14, 30, 180, 365].map(option => (

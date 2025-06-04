@@ -47,43 +47,50 @@ const CommentsContainer = () => {
   }
 
   return (
-    <div className={"max-sm:w-full fixed " + (commentsWrapper ? "top-0 sm:right-0" : "top-[100%] sm:right-[-100%]") + " duration-700 max-sm:right-0 sm:top-0 w-[30%] min-w-[350px] h-full z-[110] bg-white shadow-2xl p-8 px-16 overflow-y-auto overflow-x-hidden"}>
-      <div className="relative">
-        <h1 className="text-xl font-medium" >{t("Comments")}</h1>
-        <p className="text-lg mt-2 w-[70%] text-dark-grey line-clamp-1">{title}</p>
+    <>
+      <div
+        className={`fixed inset-0 bg-black-404 bg-opacity-40 backdrop-blur-sm z-[100] transition-opacity duration-700 ${commentsWrapper ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+        onClick={() => setCommentsWrapper(false)}
+      />
 
-        <button className="absolute top-0 right-0 flex justify-center items-center w-12 h-12 bg-grey rounded-full"
-          onClick={() => setCommentsWrapper(preVal => !preVal)}
-        >
-          <span className="fi fi-br-cross text-xl mt-[6px]"></span>
-        </button>
-      </div>
+      <div className={"overscroll-contain max-sm:w-full fixed " + (commentsWrapper ? "top-0 sm:right-0" : "top-[100%] sm:right-[-100%]") + " duration-700 max-sm:right-0 sm:top-0 w-[30%] min-w-[350px] h-full z-[110] bg-white shadow-2xl p-8 px-16 overflow-y-auto overflow-x-hidden"}>
+        <div className="relative">
+          <h1 className="text-xl font-medium" >{t("Comments")}</h1>
+          <p className="text-lg mt-2 w-[70%] text-dark-grey line-clamp-1">{title}</p>
 
-      <hr className="border-grey my-8 w-[120%] -ml-10" />
-
-      <CommentField action={t("Comment")} />
-
-      {
-        commentsArr && commentsArr.length ?
-          commentsArr.map((comment, i) => {
-            return <AnimationWrapper key={i}>
-              <CommentCard index={i} leftVal={comment.childrenLevel * 4} commentData={comment} />
-            </AnimationWrapper>
-          })
-          :
-          <NoDataMessage message="No Comments Yet" />
-      }
-
-      {
-        total_parent_comments > totalParentCommentsLoaded ?
-          <button onClick={loadMoreComments} className="text-dark-grey p-2 px-3 hover:bg-grey/30 items-center gap-2">
-            {t("Load More")}
+          <button className="absolute top-0 right-0 flex justify-center items-center w-12 h-12 bg-grey rounded-full"
+            onClick={() => setCommentsWrapper(preVal => !preVal)}
+          >
+            <span className="fi fi-br-cross text-xl mt-[6px]"></span>
           </button>
-          :
-          ""
-      }
+        </div>
 
-    </div>
+        <hr className="border-grey my-8 w-[120%] -ml-10" />
+
+        <CommentField action={t("Comment")} />
+
+        {
+          commentsArr && commentsArr.length ?
+            commentsArr.map((comment, i) => {
+              return <AnimationWrapper key={i}>
+                <CommentCard index={i} leftVal={comment.childrenLevel} commentData={comment} />
+              </AnimationWrapper>
+            })
+            :
+            <NoDataMessage message="No Comments Yet" />
+        }
+
+        {
+          total_parent_comments > totalParentCommentsLoaded ?
+            <button onClick={loadMoreComments} className="text-dark-grey p-2 px-3 hover:bg-grey/30 items-center gap-2">
+              {t("Load More")}
+            </button>
+            :
+            ""
+        }
+
+      </div>
+    </>
   )
 }
 
