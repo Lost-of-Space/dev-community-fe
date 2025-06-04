@@ -68,7 +68,7 @@ const DialogWrapper = ({
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-50 overflow-auto bg-black-404/50 flex items-center justify-center"
+            className="fixed inset-0 z-50 overflow-auto bg-black-404/40 flex items-center justify-center"
             style={{ backdropFilter: "blur(4px)" }}
             variants={overlayVariants}
             initial="hidden"

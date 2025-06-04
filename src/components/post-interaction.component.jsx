@@ -102,7 +102,7 @@ const PostInteraction = () => {
               {({ open }) => (
                 <button
                   onClick={open}
-                  className="block relative px-4 py-2 pl-8 text-sm hover:bg-grey w-full text-left"
+                  className="block relative px-4 py-2 pl-8 text-sm hover:bg-grey w-48 text-left"
                 >
                   <span className="fi fi-rr-exclamation absolute top-[23%] left-2"></span>
                   {t("post_Report this post")}

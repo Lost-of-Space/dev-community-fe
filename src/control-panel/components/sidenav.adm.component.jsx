@@ -80,6 +80,11 @@ const AdmNavbar = () => {
                   {t("Posts")}
                 </NavLink>
 
+                <NavLink to="/admin/reports" onClick={(e) => setPageState(e.target.innerText)} className="sidebar-link">
+                  <span className="fi fi-rr-file-exclamation icon"></span>
+                  {t("Reports")}
+                </NavLink>
+
                 <h1 className="text-xl text-dark-grey mt-20 mb-3">{t("Statistics")}</h1>
                 <hr className="border-grey -ml-6 mb-8 mr-6" />
 

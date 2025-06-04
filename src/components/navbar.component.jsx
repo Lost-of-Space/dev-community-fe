@@ -9,6 +9,7 @@ import { storeInSession } from "../common/session";
 import { credentialHeaders } from '~/services/credentials'
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./lang-button.component";
+import GlitchStripesLogo from "./logo-glitched.component";
 
 const Navbar = () => {
   const { t } = useTranslation();
@@ -102,7 +103,7 @@ const Navbar = () => {
         </div>
 
         <Link to="/" className="flex-none w-20">
-          <img src={theme == "light" ? logo : logo_white} className="w-full select-none" alt="logo" />
+          <GlitchStripesLogo src={theme === "light" ? logo : logo_white} />
         </Link>
 
         <div className={"absolute bg-white w-full left-0 top-full border-b border-t border-grey py-4 px-[5vw] md:border-0 md:block md:relative md:inset-0 md:p-0 md:w-auto md:show " + (searchBoxVisibility ? "show" : "hide")}>

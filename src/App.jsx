@@ -23,6 +23,7 @@ import PostStatisticsPage from "./control-panel/pages/post-statistics.page";
 import PostsManagementPage from "./control-panel/pages/manage-posts.adm.page";
 import DashboardPage from "./pages/dashboard.page";
 import './i18n';
+import ManageReportsPage from "./control-panel/pages/manage-reports.adm.page";
 
 export const UserContext = createContext({});
 
@@ -82,6 +83,7 @@ const App = () => {
                             <Route path="admin" element={<AdmNavbar />}>
                                 <Route path="users" element={<ManageUsersPage />} />
                                 <Route path="posts" element={<PostsManagementPage />} />
+                                <Route path="reports" element={<ManageReportsPage />} />
                                 <Route path="user-statistics" element={<UserStatisticsPage />} />
                                 <Route path="post-statistics" element={<PostStatisticsPage />} />
                             </Route>

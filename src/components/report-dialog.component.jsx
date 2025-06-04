@@ -79,7 +79,7 @@ const ReportDialog = ({ postId, children }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-50 bg-black-404/50 backdrop-blur-sm flex items-center justify-center"
+            className="fixed inset-0 z-50 bg-black-404/40 backdrop-blur-sm flex items-center justify-center"
             onClick={handleClose}
           >
             <motion.div
@@ -111,7 +111,7 @@ const ReportDialog = ({ postId, children }) => {
                 <button
                   onClick={handleClose}
                   disabled={isSubmitting}
-                  className="px-4 py-2 bg-grey text-black hover:bg-black hover:text-white disabled:opacity-50"
+                  className="px-4 py-2 bg-grey text-black hover:bg-black hover:text-white disabled:opacity-40"
                 >
                   {t("Cancel")}
                 </button>

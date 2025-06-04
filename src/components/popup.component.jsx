@@ -26,7 +26,7 @@ export const PopupMenu = ({ children, trigger }) => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-48 bg-white shadow-sm py-2 z-10 border border-grey">
+        <div className="absolute right-0 top-full mt-2 min-w-48 bg-white shadow-sm py-2 z-10 border border-grey">
           {children}
         </div>
       )}
