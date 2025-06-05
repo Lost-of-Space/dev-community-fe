@@ -92,7 +92,7 @@ const ManageReportCard = ({ report, setReports }) => {
   return (
     <tr className="border-b border-grey hover:bg-grey/20 max-sm:flex flex-col">
       {/* Post Title - small line */}
-      <td className="p-4 max-w-[200px]">
+      <td className="p-4 max-w-[200px] max-sm:max-w-full max-sm:border-b border-grey">
         <NavLink
           to={`/post/${post_id.post_id}`}
           className="truncate block hover:underline active:underline"
@@ -101,26 +101,28 @@ const ManageReportCard = ({ report, setReports }) => {
         </NavLink>
       </td>
 
-      {/* Report Text - long line */}
+      {/* Report Text */}
       <td className="p-4">
         <PopupMenu
-          trigger={<p className="line-clamp-1 max-w-[150px] truncate block overflow-hidden">{reportText}</p>}>
+          trigger={<p className="line-clamp-1 max-sm:line-clamp-3 max-sm:text-left text-wrap break-words max-w-[150px] max-sm:max-w-full text-wrap md:truncate block md:overflow-hidden">{reportText}</p>}>
           <p className="px-2 w-80">{reportText}</p>
         </PopupMenu>
       </td>
 
       {/* Reported By - only username */}
-      <td className="p-4 max-w-[150px]">
-        <NavLink to={`/user/${from.username}`} className="block text-dark-grey md:max-w-[150px] truncate overflow-hidden whitespace-nowrap hover:underline active:underline">@{from.username}</NavLink>
+      <td className="p-4 max-w-[150px] max-sm:py-0 max-sm:max-w-full">
+        <NavLink to={`/user/${from.username}`} className="block text-dark-grey hover:underline active:underline truncate overflow-hidden whitespace-nowrap">
+          <span className="hidden max-sm:inline-block text-black">{t("By")}</span> @{from.username}
+        </NavLink>
       </td>
 
       {/* Reported At */}
-      <td className="p-4 max-w-[150px]">
+      <td className="p-4 max-w-[150px] max-sm:py-0 max-sm:max-w-full">
         <p>{new Date(createdAt).toLocaleDateString()}</p>
       </td>
 
       {/* Status */}
-      <td className="p-4 max-w-[150px]">
+      <td className="p-4 max-w-[150px] max-sm:max-w-full max-sm:py-2">
         <select
           value={reportStatus}
           onChange={handleStatusChange}
@@ -136,7 +138,8 @@ const ManageReportCard = ({ report, setReports }) => {
       </td>
 
       {/* Actions */}
-      <td className="p-4 max-w-[120px]">
+      <td className="p-4 max-w-[120px] max-sm:max-w-full">
+        <div className="hidden max-sm:block h-px bg-grey mb-4"></div>
         <div className="flex gap-2">
           <DialogWrapper
             onConfirm={deleteReport}
