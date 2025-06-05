@@ -54,7 +54,7 @@ const ManageReportCard = ({ report, setReports }) => {
       }));
 
       toast.dismiss(loadingToast);
-      toast.success(response.data.message);
+      toast.success(t(response.data.message));
     } catch (error) {
       console.error("Failed to update report status:", error);
       toast.dismiss(loadingToast);
@@ -78,11 +78,13 @@ const ManageReportCard = ({ report, setReports }) => {
 
       setReports(prevReports => ({
         ...prevReports,
-        results: prevReports.results.filter(report => report._id !== _id)
+        results: prevReports.results.map(report =>
+          report._id === _id ? { ...report, status: newStatus } : report
+        )
       }));
 
       toast.dismiss(loadingToast);
-      toast.success(response.data.message);
+      toast.success(t(response.data.message));
     } catch (error) {
       toast.dismiss(loadingToast);
       toast.error(error.response?.data?.error || t("Failed to delete report"));

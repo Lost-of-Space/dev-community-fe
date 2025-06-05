@@ -34,7 +34,7 @@ const UserAuthForm = ({ type }) => {
       })
       .catch((error) => {
         const errorMsg = error?.response?.data?.error || "Something went wrong.";
-        toast.error(`${t("An error occured")}: ${errorMsg}`);
+        toast.error(`${t("An error occured")}: ${t(errorMsg)}`);
       })
 
   }
@@ -169,7 +169,7 @@ const UserAuthForm = ({ type }) => {
             />
 
             <button className="btn-dark center mt-14" type="submit" onClick={handleSubmit}>
-              {type.replace("-", " ")}
+              {t(type == "sign-in" ? t("Sign In") : t("Sign Up"))}
             </button>
 
             <div className="relative w-full flex items-center gap-2 my-10 opacity-10 uppercase text-black font-bold">
