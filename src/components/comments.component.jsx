@@ -77,7 +77,7 @@ const CommentsContainer = () => {
               </AnimationWrapper>
             })
             :
-            <NoDataMessage message="No Comments Yet" />
+            <NoDataMessage message={t("No Comments Yet")} />
         }
 
         {
