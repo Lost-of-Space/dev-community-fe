@@ -7,10 +7,9 @@ import Quote from "@editorjs/quote";
 import Marker from "@editorjs/marker";
 import InlineCode from "@editorjs/inline-code";
 import { toast } from "react-hot-toast";
-import { useTranslation } from "react-i18next";
 
 // Uploading via URL
-const uploadImageByURL = (e) => {
+const uploadImageByURL = async (e) => {
   let link = new Promise((resolve, reject) => {
     try {
       resolve(e)
@@ -20,12 +19,11 @@ const uploadImageByURL = (e) => {
     }
   })
 
-  return link.then(url => {
-    return {
-      success: 1,
-      file: { url }
-    }
-  })
+  const url = await link;
+  return {
+    success: 1,
+    file: { url }
+  };
 }
 
 
@@ -33,11 +31,9 @@ const uploadImageByURL = (e) => {
 const MAX_FILE_SIZE_MB = 4;
 
 const uploadImageByFile = (file) => {
-  const { t } = useTranslation();
-
   return new Promise((resolve, reject) => {
     if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-      toast.error(`${t("File size exceeds")} ${MAX_FILE_SIZE_MB} MB`);
+      toast.error(`${"File size exceeds"} ${MAX_FILE_SIZE_MB} MB`);
       reject(new Error(`File size exceeds ${MAX_FILE_SIZE_MB} MB`));
       return;
     }
@@ -55,18 +51,18 @@ const uploadImageByFile = (file) => {
       .then((data) => {
         if (data.secure_url) {
           const optimizedUrl = `${data.secure_url}?c_fill&auto=webp&quality=auto`;
-          toast.success(t("Uploaded"));
+          toast.success("Uploaded");
           resolve({
             success: 1,
             file: { url: optimizedUrl }
           });
         } else {
-          toast.error(t(`${t("An error occured")}...`));
+          toast.error(`${"An error occured"}...`);
           reject(new Error('Image upload failed'));
         }
       })
       .catch((error) => {
-        toast.error(t(`${t("An error occured")}: ${error}`));
+        toast.error(`${"An error occured"}: ${error}`);
         reject(error);
       });
   });

@@ -1,7 +1,9 @@
 const Img = ({ url, caption }) => {
   return (
     <div className="my-4">
-      <img className="max-h-[400px] rounded-xl" src={url} alt={caption.length ? caption : ""} />
+      <a href={url} target="_blank">
+        <img className="max-h-[400px] rounded-xl" src={url} alt={caption.length ? caption : ""} />
+      </a>
       {caption.length ? <p className="w-full text-center my-3 md:mb-12 text-base text-dark-grey">{caption}</p> : ""}
     </div>
   );
