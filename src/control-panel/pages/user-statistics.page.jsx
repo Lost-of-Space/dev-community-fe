@@ -135,9 +135,9 @@ const StatisticsPage = () => {
               (i !== 0 ? "border-grey border-l" : "")
             }
           >
-            <h1 className="text-xl lg:text-2xl mb-2">{value.toLocaleString()}</h1>
+            <h1 className="text-xl lg:text-2xl mb-2">{t(value.toLocaleString())}</h1>
             <p className="max-lg:text-dark-grey max-sm:text-sm capitalize text-center">
-              {id === "users_last_days" ? t(id, { days }) : t(id)}
+              {id === t("users_last_days") ? t(id, { days }) : t(id)}
             </p>
           </div>
         ))}

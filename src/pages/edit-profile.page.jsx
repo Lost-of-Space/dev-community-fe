@@ -168,7 +168,7 @@ const EditProfilePage = () => {
 
               <div className="max-lg:center items-center mb-5">
                 <label htmlFor="uploadImg" id="profileImgLbl" className="center relative block w-48 h-48 bg-grey rounded-full overflow-hidden">
-                  <div className="w-full h-full absolute top-0 left-0 flex items-center justify-center text-white bg-black/30 opacity-0 hover:opacity-100 cursor-pointer">
+                  <div className="w-full h-full absolute top-0 left-0 flex items-center justify-center text-center text-white bg-black/30 opacity-0 hover:opacity-100 cursor-pointer">
                     {t("Upload Image")}
                   </div>
                   <img ref={profileImgElement} src={profile_img} alt="profile picture" />

@@ -78,9 +78,7 @@ const ManageReportCard = ({ report, setReports }) => {
 
       setReports(prevReports => ({
         ...prevReports,
-        results: prevReports.results.map(report =>
-          report._id === _id ? { ...report, status: newStatus } : report
-        )
+        results: prevReports.results.filter(report => report._id !== _id)
       }));
 
       toast.dismiss(loadingToast);

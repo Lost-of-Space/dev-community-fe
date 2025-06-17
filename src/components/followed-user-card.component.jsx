@@ -8,7 +8,7 @@ const FollowedUserCard = ({ user, targetUsername = null }) => {
   return (
     <div className="flex justify-between gap-5 items-center mb-5">
       <Link to={`/user/${username}`} className="flex gap-5 items-center mb-5 w-full">
-        <img src={profile_img} alt="user avatar" className="w-12 h-12 rounded-full" />
+        <img src={profile_img} alt="user avatar" className="w-12 h-12 rounded-full max-sm:hidden" />
         <div>
           <h1 className="font-medium text-xl line-clamp-2">{fullname}</h1>
           <p className="text-dark-grey">@{username}</p>

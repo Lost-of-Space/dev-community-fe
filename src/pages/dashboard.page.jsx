@@ -155,7 +155,7 @@ const UserStatisticsPage = () => {
               }
             >
               <h1 className="text-xl lg:text-2xl mb-2">{value.toLocaleString()}</h1>
-              <p className="max-lg:text-dark-grey capitalize text-center">{label}</p>
+              <p className="max-lg:text-dark-grey capitalize text-center max-sm:text-sm">{label}</p>
             </div>
           ))}
         </div>

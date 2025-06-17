@@ -180,11 +180,11 @@ const PostEditor = () => {
         </p>
 
         <div className="flex gap-4 max-sm:gap-2 ml-auto">
-          <button className="btn-dark py-2 max-sm:px-3"
+          <button className="btn-dark py-2 max-sm:px-3 max-sm:text-sm"
             onClick={handlePublishEvent}>
             {t("Publish")}
           </button>
-          <button className="btn-light py-2 max-sm:px-3" onClick={handleSaveDraft}>
+          <button className="btn-light py-2 max-sm:px-3 max-sm:text-sm" onClick={handleSaveDraft}>
             {t("Save Draft")}
           </button>
         </div>

@@ -55,13 +55,13 @@ const FollowButton = ({ username }) => {
         isFollowed ?
           <button
             onClick={handleFollow}
-            className="btn-light">
+            className="btn-light max-sm:text-base">
             {t("Unfollow")}
           </button>
           :
           <button
             onClick={handleFollow}
-            className="btn-dark">
+            className="btn-dark max-sm:text-sm">
             {t("Follow")}
           </button>
       }
